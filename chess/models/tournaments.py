@@ -1,19 +1,13 @@
 
 class Tournament:
-    def __init__(self, Match, date_debut, date_fin, winner):
-        self.Matchs = Match
-        self.date_debut = date_debut
-        self.date_fin = date_fin
-        self.winner = winner
+    def __init__(self, rounds_number):
+        self.rounds_number = rounds_number
 
-    def create(self):
+    def create(tournament):
         pass
 
-    def delete(self):
+    def matchs(self):
         pass
 
-    def matchs(self, Match):
-        pass
-
-    def win(self, winner):
+    def save(self):
         pass

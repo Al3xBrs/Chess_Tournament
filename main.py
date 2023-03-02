@@ -1,7 +1,13 @@
 
+from chess.models.players import Player
+
+
 def main():
     """"""
-    print("Hello world")
+    p = Player("BRISE", "ALEXANDRE", "03/04/1996", "AB15478",)
+    p2 = Player("LATRILLE", "AMELIE", "11/08/1997", "AL15423")
+
+    Player.load(p)
 
 
 if __name__ == "__main__":

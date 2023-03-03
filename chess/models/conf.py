@@ -1,1 +1,3 @@
-DATA_PLAYERS = "./data/players/players.json"
+from tinydb import TinyDB
+
+DATA_PLAYERS = TinyDB("./data/players/players.json")

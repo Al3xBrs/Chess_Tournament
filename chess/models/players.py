@@ -6,6 +6,7 @@ class Player:
     """
     Joueur.
     """
+    table = DATA_PLAYERS
 
     def __init__(self, nom, prenom, date_naissance, ine):
         """Initialisation du joueur.
@@ -27,42 +28,21 @@ class Player:
         Creation de la fiche du joueur dans la db.
         """
 
-        data_players = DATA_PLAYERS
-        player_dict = {
-            "nom": self.nom,
-            "prenom": self.prenom,
-            "date_naissance": self.date_naissance,
-            "ine": self.ine,
-        }
-        data_players.insert(player_dict)
+        self.table.insert(self.__dict__)
 
     @classmethod
     def find_all(cls):
         """Charge la db de tous les joueurs.
 
         Returns:
-            dict: Liste des joueurs et leurs attributs. 
+            list_instance: Liste des joueurs. 
         """
-        data_players = DATA_PLAYERS
-        return data_players.all()
-
-    def remove(ine):
-        """Suppression du joueur.
-
-        Args:
-            player (ine): Identifiant National d'Echec
-        """
-        data_players = DATA_PLAYERS
-        User = Query()
-        data_players.remove(User.ine == ine)
-
-    @classmethod
-    def remove_all(cls):
-        """
-        Supprime toute la db.
-        """
-        data_players = DATA_PLAYERS
-        data_players.truncate()
+        list_doc = cls.table.all()
+        print(list_doc)
+        list_dict = [dict(doc) for doc in list_doc]
+        print(list_dict)
+        list_instance = [Player(**p_dict) for p_dict in list_dict]
+        return list_instance
 
     @classmethod
     def find_one(cls, data, value):
@@ -76,12 +56,28 @@ class Player:
             list: Données du joueurs trouvé. [] si aucun trouvé.
         """
 
-        data_players = DATA_PLAYERS
         User = Query()
-        return data_players.search(User[data] == value)
+        return cls.table.search(User[data] == value)
+
+    def remove(self):
+        """Suppression du joueur.
+
+        Args:
+            player (ine): Identifiant National d'Echec
+        """
+
+        User = Query()
+        self.table.remove(User.ine == self.ine)
 
     @classmethod
-    def update(cls, user_data, user_value, value_to_change):
+    def remove_all(cls):
+        """
+        Supprime toute la db.
+        """
+
+        cls.table.truncate()
+
+    def update(self, user_value, value_to_change):
         """Update la fiche joueur.
 
         Args:
@@ -90,7 +86,6 @@ class Player:
             value_to_change (any): Nouvelle valeur.
         """
 
-        data_players = DATA_PLAYERS
         User = Query()
-        data_players.update({user_data: value_to_change},
-                            User[user_data] == user_value)
+        self.table.update({self.user_data: value_to_change},
+                          User[self.user_data] == user_value)

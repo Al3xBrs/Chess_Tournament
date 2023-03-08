@@ -8,7 +8,7 @@ class Player:
     """
     table = DATA_PLAYERS
 
-    def __init__(self, nom, prenom, date_naissance, ine):
+    def __init__(self, nom, prenom, date_naissance, ine, score=0):
         """Initialisation du joueur.
 
         Args:
@@ -16,12 +16,14 @@ class Player:
             prenom (str): prenom du joueur
             date_naissance (int): age du joueur
             ine (str): Identification National d'échec
+            score(int): Point du joueur, 0 par défaut
         """
 
         self.nom = nom
         self.prenom = prenom
         self.date_naissance = date_naissance
         self.ine = ine
+        self.score = score
 
     def create(self):
         """
@@ -38,9 +40,7 @@ class Player:
             list_instance: Liste des joueurs. 
         """
         list_doc = cls.table.all()
-        print(list_doc)
         list_dict = [dict(doc) for doc in list_doc]
-        print(list_dict)
         list_instance = [Player(**p_dict) for p_dict in list_dict]
         return list_instance
 

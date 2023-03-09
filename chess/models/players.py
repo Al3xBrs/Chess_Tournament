@@ -39,6 +39,7 @@ class Player:
         Returns:
             list_instance: Liste des joueurs. 
         """
+
         list_doc = cls.table.all()
         list_dict = [dict(doc) for doc in list_doc]
         list_instance = [Player(**p_dict) for p_dict in list_dict]

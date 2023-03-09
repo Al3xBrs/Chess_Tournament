@@ -2,6 +2,9 @@ from chess.models.players import Player
 from pprint import pprint
 
 
+# TODO : finir views : ATTENTION ! Les views, pas de calcul dedans.Ref player_submenu_view
+# TODO : Commencer les controllers - Menu global -> menu player -> menu update
+
 def players_menu_view():
     """Menu joueur
 
@@ -74,7 +77,7 @@ def player_create_menu_view():
     return input("Choix : ")
 
 
-def player_menu_view(data, value):
+def player_submenu_view(player_dict: dict) -> int:
     """Menu joueur
 
     Args:
@@ -85,7 +88,7 @@ def player_menu_view(data, value):
         Int: 1 = view update player, 2 = view delete player, 4 = View précédente
     """
     print("------- Menu joueur -------")
-    pprint(Player.find_one(data, value), sort_dicts=False)
+    pprint(player_dict)
     print("(1) Mettre à jour le profil")
     print("(2) Supprimer le joueur")
     print("(4) Retour")

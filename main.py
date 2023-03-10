@@ -1,11 +1,11 @@
-
 from chess.models.players import Player
+from chess.controllers.players_controller import show_main_menu_view, show_menu
 
 
 def main():
     """"""
-    p = Player("BRISE", "ALEXANDRE", "03/04/1996", "AB15478",)
-    p2 = Player("LATRILLE", "AMELIE", "11/08/1997", "AL15423")
+
+    show_menu(show_main_menu_view())
 
 
 if __name__ == "__main__":

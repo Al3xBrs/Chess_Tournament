@@ -1,9 +1,8 @@
-from chess.models.players import Player
 from pprint import pprint
 
 
-# TODO : finir views : ATTENTION ! Les views, pas de calcul dedans.Ref player_submenu_view
 # TODO : Commencer les controllers - Menu global -> menu player -> menu update
+
 
 def players_menu_view():
     """Menu joueur
@@ -23,8 +22,8 @@ def players_menu_view():
 def players_list_menu_view():
     """Menu liste joueurs
 
-    Returns:
-        int: 1 = List sorted Alphabétique, 2 = List sorted INE, 3 = List sorted nombre de point actuel, 4 = View précédente
+    Returns: int: 1 = List sorted Alphabétique, 2 = List sorted INE, 3 = List sorted nombre de point actuel,
+    4 = View précédente
     """
     print("------- Menu liste joueurs -------")
     print("(1) Trier par ordre alphabétique")
@@ -36,27 +35,23 @@ def players_list_menu_view():
     return input("Choix : ")
 
 
-def players_list_view(i):
+def players_list_view(player_list: list) -> any:
     """Affiche la liste des joueurs
 
     Args:
-        i (int): 1 = List sorted Alphabétique, 2 = List sorted INE, 3 = List sorted par nombre de point en cours)
+        player_list: liste des joueurs
+
 
     Returns:
         Any: 4 = View précédente, sinon = donnée et valeur du joueur à retrouver
     """
     print("------- Liste joueurs -------")
     print("(4) Retour")
-    print("(\x1B[3mTaper ’nom’, ’prenom’, ’date_naissance’ ou ’ine’ suivi de ‘, valeur’ à retrouver pour chercher un joueur en particulier.\x1B[0m)")
-    list_players = Player.find_all().__dict__
-    print(list_players)
-    if i == 1:
-        sorted(list_players.items(), key=lambda t: t[0])
-    if i == 2:
-        sorted(list_players, key=lambda t: t[3])
-    if i == 3:
-        sorted(list_players, key=lambda t: t[4])
-
+    print(
+        "(\x1B[3mTaper ’nom’, ’prenom’, ’date_naissance’ ou ’ine’ suivi de ‘, valeur’ à retrouver pour chercher un "
+        "joueur en particulier.\x1B[0m)"
+    )
+    pprint(player_list)
     print("------- Liste joueurs -------")
 
     return input("Choix : ")
@@ -77,12 +72,12 @@ def player_create_menu_view():
     return input("Choix : ")
 
 
-def player_submenu_view(player_dict: dict) -> int:
+def player_submenu_view(player_dict: dict) -> str:
     """Menu joueur
 
     Args:
-        data (str): Donnée du joueur
-        value (any): Valeur de la donnée joueur
+        player_dict (dict): Donnée du joueur
+
 
     Returns:
         Int: 1 = view update player, 2 = view delete player, 4 = View précédente
@@ -97,44 +92,45 @@ def player_submenu_view(player_dict: dict) -> int:
     return input("Choix : ")
 
 
-def player_update_view(data, value):
+def player_update_view(player_dict: dict) -> any:
     """Menu update joueur
 
     Args:
-        data (str): Donnée du joueur
-        value (any): Valeur de la donnée joueur
+        player_dict (dict): Donnée du joueur
+
 
     Returns:
         any: View précédente si 4, maj du joueur si données.
     """
     print("------- Menu joueur -------")
-    pprint(Player.find_one(data, value), sort_dicts=False)
-    print("\x1B[3m(Taper ’nom’, ’prenom’, ’date_naissance’ ou ’ine’ suivi de ’, valeur’ comme nouvelle valeur à renseigner.)\x1B[0m")
+    pprint(player_dict)
+    print(
+        "\x1B[3m(Taper ’nom’, ’prenom’, ’date_naissance’ ou ’ine’ suivi de ’, valeur’ comme nouvelle valeur à "
+        "renseigner.)\x1B[0m"
+    )
     print("(4) Retour")
     print("------- Menu joueur -------")
 
     return input("Choix : ")
 
 
-def player_delete_view(data, value):
+def player_delete_view(player_dict: dict) -> bool:
     """Suppression du joueur
 
     Args:
-        data (str): Donnée du joueur
-        value (any): Valeur de la donnée joueur
+        player_dict (dict): Donnée du joueur
+
 
     Returns:
         bool: True if "y", False if "n"
     """
     print("------- Menu joueur -------")
-    pprint(Player.find_one(data, value), sort_dicts=False)
+    pprint(player_dict)
     print("(4) Retour")
     print("------- Menu joueur -------")
 
     inp = input("Souhaitez-vous vraiment supprimer le joueur ? (y/n) : ")
-    if inp == "y":
-
+    if inp.lower() == "y":
         return True
-    if inp == "n":
-
+    if inp.lower() == "n":
         return False

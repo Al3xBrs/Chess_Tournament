@@ -7,9 +7,17 @@ class Player:
     """
     Joueur.
     """
+
     table = DATA_PLAYERS
 
-    def __init__(self, nom, prenom, date_naissance, ine, score=0):
+    def __init__(
+        self,
+        nom: str,
+        prenom: str,
+        date_naissance: str,
+        ine: str,
+        score: int = 0,  # à confirmer
+    ) -> None:
         """Initialisation du joueur.
 
         Args:
@@ -38,12 +46,13 @@ class Player:
         """Charge la db de tous les joueurs.
 
         Returns:
-            list_instance: Liste des joueurs. 
+            list_instance: Liste des joueurs.
         """
 
         list_doc = cls.table.all()
         list_dict = [dict(doc) for doc in list_doc]
         list_instance = [Player(**p_dict) for p_dict in list_dict]
+
         return list_instance
 
     @classmethod
@@ -58,12 +67,20 @@ class Player:
             list: Données du joueurs trouvé. [] si aucun trouvé.
         """
 
+        # query
         User = Query()
-        return cls.table.search(User[data] == value)
+        p_list = cls.table.search(User[data] == value)
+
+        p_list = [Player(**i) for i in p_list]
+
+        # we want only 1 player
+        if len(p_list) != 1:
+            raise AttributeError("more than 1 p")
+
+        return p_list[0]
 
     def remove(self):
-        """Suppression du joueur.
-        """
+        """Suppression du joueur."""
 
         User = Query()
         self.table.remove(User.ine == self.ine)
@@ -86,5 +103,6 @@ class Player:
         """
         user_data = user_value
         User = Query()
-        self.table.update({self.user_data: value_to_change},
-                          User[self.user_data] == user_value)
+        self.table.update(
+            {self.user_data: value_to_change}, User[self.user_data] == user_value
+        )

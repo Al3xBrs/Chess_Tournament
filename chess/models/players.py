@@ -2,6 +2,7 @@ from tinydb import Query
 from chess.models.conf import DATA_PLAYERS
 
 
+# TODO : Revoir fonction update()
 class Player:
     """
     Joueur.
@@ -62,9 +63,6 @@ class Player:
 
     def remove(self):
         """Suppression du joueur.
-
-        Args:
-            player (ine): Identifiant National d'Echec
         """
 
         User = Query()
@@ -82,11 +80,11 @@ class Player:
         """Update la fiche joueur.
 
         Args:
-            user_data (str): Donnée du joueur à changer.
+
             user_value (any): Valeur du joueur à changer.
             value_to_change (any): Nouvelle valeur.
         """
-
+        user_data = user_value
         User = Query()
         self.table.update({self.user_data: value_to_change},
                           User[self.user_data] == user_value)

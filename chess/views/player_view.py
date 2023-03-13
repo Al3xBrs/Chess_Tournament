@@ -2,7 +2,7 @@ from pprint import pprint
 
 
 # TODO : Commencer les controllers - Menu global -> menu player -> menu update
-
+# TODO : Changer print() --> print() """"""
 
 def players_menu_view():
     """Menu joueur

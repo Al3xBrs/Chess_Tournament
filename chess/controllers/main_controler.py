@@ -4,7 +4,9 @@ from chess.views.main_view import *
 
 
 def main_menu_controller():
-    choice = main_menu()
+    """ """
+
+    choice = main_menu_view()
 
     if choice == 1:
         return players_menu_controler()

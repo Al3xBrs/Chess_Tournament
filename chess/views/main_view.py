@@ -1,10 +1,15 @@
-def main_menu() -> int:
+def main_menu_view() -> str:
     """
     Affiche le menu principal
     """
-    print("------- Menu principal -------")
-    print("(1) Menu joueur")
-    print("(2) Menu tournois")
-    print("------- Menu principal -------")
 
-    return int(input("Choix : "))
+    print(
+        """
+    ------- Menu principal -------
+    (1) Menu joueur
+    (2) Menu tournois
+    ------- Menu principal -------        
+    """
+    )
+
+    return input("Choix : ")

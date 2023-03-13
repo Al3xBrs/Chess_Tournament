@@ -4,6 +4,7 @@ from pprint import pprint
 # TODO : Commencer les controllers - Menu global -> menu player -> menu update
 # TODO : Changer print() --> print() """"""
 
+
 def players_menu_view():
     """Menu joueur
 
@@ -19,7 +20,7 @@ def players_menu_view():
     return input("Choix : ")
 
 
-def players_list_menu_view():
+def players_list_menu_view() -> str:
     """Menu liste joueurs
 
     Returns: int: 1 = List sorted Alphabétique, 2 = List sorted INE, 3 = List sorted nombre de point actuel,
@@ -28,19 +29,18 @@ def players_list_menu_view():
     print("------- Menu liste joueurs -------")
     print("(1) Trier par ordre alphabétique")
     print("(2) Trier par INE")
-    print("(3) Trier par nombre de point")
+    # print("(3) Trier par nombre de point")
     print("(4) Retour")
     print("------- Menu liste joueurs -------")
 
     return input("Choix : ")
 
 
-def players_list_view(player_list: list) -> any:
+def players_list_view(player_list: list[dict]) -> any:
     """Affiche la liste des joueurs
 
     Args:
         player_list: liste des joueurs
-
 
     Returns:
         Any: 4 = View précédente, sinon = donnée et valeur du joueur à retrouver

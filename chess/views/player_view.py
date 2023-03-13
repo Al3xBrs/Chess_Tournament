@@ -5,7 +5,7 @@ from pprint import pprint
 # TODO : Changer print() --> print() """"""
 
 
-def players_menu_view():
+def players_menu_view() -> str:
     """Menu joueur
 
     Returns:
@@ -36,7 +36,7 @@ def players_list_menu_view() -> str:
     return input("Choix : ")
 
 
-def players_list_view(player_list: list[dict]) -> any:
+def players_list_view(player_list: list[dict]) -> str:
     """Affiche la liste des joueurs
 
     Args:
@@ -57,7 +57,7 @@ def players_list_view(player_list: list[dict]) -> any:
     return input("Choix : ")
 
 
-def player_create_menu_view():
+def player_create_menu_view() -> str:
     """Menu création joueur
 
     Returns:
@@ -92,7 +92,7 @@ def player_submenu_view(player_dict: dict) -> str:
     return input("Choix : ")
 
 
-def player_update_view(player_dict: dict) -> any:
+def player_update_view(player_dict: dict) -> str:
     """Menu update joueur
 
     Args:
@@ -114,7 +114,7 @@ def player_update_view(player_dict: dict) -> any:
     return input("Choix : ")
 
 
-def player_delete_view(player_dict: dict) -> bool:
+def player_delete_view(player_dict: dict) -> str:
     """Suppression du joueur
 
     Args:
@@ -130,7 +130,5 @@ def player_delete_view(player_dict: dict) -> bool:
     print("------- Menu joueur -------")
 
     inp = input("Souhaitez-vous vraiment supprimer le joueur ? (y/n) : ")
-    if inp.lower() == "y":
-        return True
-    if inp.lower() == "n":
-        return False
+
+    return inp

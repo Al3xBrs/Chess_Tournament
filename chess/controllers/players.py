@@ -77,7 +77,7 @@ def player_submenu_controller(payload):
     elif choice == "2":
         return player_remove_menu_controller(find_player)
     elif choice == "4":
-        return "players_list_menu"
+        return ("players_list_menu",)
     elif choice == "q":
         return "main_menu"
 
@@ -86,6 +86,11 @@ def player_create_menu_controller(payload: dict):
     """ """
 
     choice = player_create_menu_view()
+    if not choice:
+        print(
+            "Vous ne voulez pas creer un jouer ?!? Ok, bah retour au  menu player alorss..."
+        )
+        return "player_menu_colntroller", payload
 
     player = Player(choice[0], choice[1], choice[2], choice[3])
     player.create()

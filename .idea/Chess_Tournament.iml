@@ -5,6 +5,9 @@
       <sourceFolder url="file://$MODULE_DIR$/chess" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/data" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/chess/controllers" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/chess/models" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/chess/views" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/env" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>

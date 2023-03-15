@@ -1,4 +1,4 @@
-from chess.views.player_view import *
+from chess.views.players import *
 
 player1 = Player("TEST", "ICULE", "01/01/2001", "TI87898")
 player2 = Player("JOHN", "DEUF", "02/02/2002", "JD87898")

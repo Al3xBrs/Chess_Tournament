@@ -11,12 +11,12 @@ class Player:
     table = DATA_PLAYERS
 
     def __init__(
-        self,
-        nom: str,
-        prenom: str,
-        date_naissance: str,
-        ine: str,
-        score: int = 0,  # à confirmer
+            self,
+            nom: str,
+            prenom: str,
+            date_naissance: str,
+            ine: str,
+            score: int = 0,  # à confirmer
     ) -> None:
         """Initialisation du joueur.
 
@@ -75,7 +75,7 @@ class Player:
 
         # we want only 1 player
         if len(p_list) != 1:
-            raise AttributeError("more than 1 p")
+            raise AttributeError("more than 1 player")
 
         return p_list[0]
 
@@ -101,8 +101,6 @@ class Player:
             user_value (any): Valeur du joueur à changer.
             value_to_change (any): Nouvelle valeur.
         """
-        user_data = user_value
+
         User = Query()
-        self.table.update(
-            {self.user_data: value_to_change}, User[self.user_data] == user_value
-        )
+        self.table.update({user_value: value_to_change}, User.ine == self.ine)

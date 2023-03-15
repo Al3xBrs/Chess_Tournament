@@ -1,1 +1,1 @@
-from chess.controllers.players_controller import *
+from chess.controllers.players import *

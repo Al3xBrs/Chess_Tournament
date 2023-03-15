@@ -3,7 +3,7 @@ from chess.controllers.players import *
 from chess.views.main import *
 
 
-def main_menu_controller():
+def main_menu_controller(payload: dict):
     """main_menu_controller"""
 
     choice = main_menu_view()
@@ -15,4 +15,4 @@ def main_menu_controller():
     elif choice == "q":
         raise KeyboardInterrupt("Bye Bye")
 
-    return "main_menu"
+    return "main_menu_controller", payload

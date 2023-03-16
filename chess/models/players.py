@@ -2,7 +2,6 @@ from tinydb import Query
 from chess.models.conf import DATA_PLAYERS
 
 
-# TODO : Revoir fonction update()
 class Player:
     """
     Joueur.

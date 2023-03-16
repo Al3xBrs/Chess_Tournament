@@ -1,9 +1,6 @@
 from pprint import pprint
 
 
-# TODO : Changer print() --> print() """"""
-
-
 def players_menu_view() -> str:
     """Menu joueur
 
@@ -47,19 +44,28 @@ def players_list_view(players_list: list[dict]):
     Returns:
         Any: 4 = View précédente, sinon = donnée et valeur du joueur à retrouver
     """
-    pprint(players_list)
+
     print("""
         ------- Liste joueurs -------
+        """)
+    pprint(players_list)
+    print("""
+    (3) Chercher un joueur
     (4) Retour
     (q) Menu principal
-    (\x1B[3mTaper ’nom’, ’prenom’, ’date_naissance’ ou ’ine’ suivi de ‘, valeur’ à retrouver pour chercher un
-    joueur en particulier.\x1B[0m)
-    
         ------- Liste joueurs -------
     """)
-    inp1 = input("Donnée du joueur à chercher : ")
-    inp2 = input("Valeur de la donnée à chercher : ")
 
+    return input("Choix : ")
+
+
+def search_player_view():
+    print("""
+        ------- Chercher joueur -------
+    """)
+
+    inp1 = input("Entrer la donnée du joueur à chercher : ")
+    inp2 = input("Entrer la valeur de cette donnée : ")
     return [inp1, inp2]
 
 
@@ -82,7 +88,7 @@ def player_create_menu_view():
     return [nom, prenom, date_naissance, ine]
 
 
-def player_submenu_view(player_dict: dict) -> str:
+def player_submenu_view(player: dict) -> str:
     """Menu joueur
 
     Args:
@@ -94,7 +100,7 @@ def player_submenu_view(player_dict: dict) -> str:
     """
     print(f"""
         ------- Menu joueur -------
-    {player_dict}
+    {player}
     (1) Mettre à jour le profil
     (2) Supprimer le joueur
     (4) Retour
@@ -105,7 +111,7 @@ def player_submenu_view(player_dict: dict) -> str:
     return input("Choix : ")
 
 
-def player_update_view(player_dict: dict) -> str:
+def player_update_view(player: dict) -> list:
     """Menu update joueur
 
     Args:
@@ -117,15 +123,15 @@ def player_update_view(player_dict: dict) -> str:
     """
     print(f"""
         ------- Menu joueur -------
-    {player_dict}
+    {player}
     
-    \x1B[3m(Taper ’nom’, ’prenom’, ’date_naissance’ ou ’ine’ suivi de ’, valeur’ comme nouvelle valeur à
-    renseigner.)\x1B[0m
+    \x1B[3m(Taper en premier la donnée à mettre à jour, puis la nouvelle valeur de cette donnée.)\x1B[0m
     (4) Retour
         ------- Menu joueur -------
     """)
-
-    return input("Choix : ")
+    inp1 = input("Entrer la donnée à modifier : ")
+    inp2 = input("Entrer la nouvelle valeur : ")
+    return [inp1, inp2]
 
 
 def player_delete_view() -> str:

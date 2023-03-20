@@ -1,21 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module type="PYTHON_MODULE" version="4">
-  <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/chess" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/data" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/chess/controllers" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/chess/models" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/chess/views" isTestSource="false" />
-      <excludeFolder url="file://$MODULE_DIR$/env" />
-      <excludeFolder url="file://$MODULE_DIR$/venv" />
-    </content>
-    <orderEntry type="jdk" jdkName="Python 3.11 (Chess_Tournament)" jdkType="Python SDK" />
-    <orderEntry type="sourceFolder" forTests="false" />
-  </component>
+<module version="4">
   <component name="PyDocumentationSettings">
-    <option name="format" value="EPYTEXT" />
-    <option name="myDocStringFormat" value="Epytext" />
+    <option name="format" value="PLAIN" />
+    <option name="myDocStringFormat" value="Plain" />
   </component>
 </module>

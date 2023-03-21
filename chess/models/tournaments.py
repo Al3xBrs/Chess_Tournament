@@ -61,7 +61,7 @@ class Tournament:
 
     @classmethod
     def find_one(cls, data, value):
-        """ """
+        """ Chercher un tournois """
         Obj = Query()
         t_list = cls.table.search(Obj[data] == value)
 

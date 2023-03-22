@@ -65,7 +65,7 @@ class Tournament:
         Obj = Query()
         t_list = cls.table.search(Obj[data] == value)
 
-        t_list = [Tournament(**i) for i in t_list]
+        # t_list = [Tournament(**i) for i in t_list]
 
         if len(t_list) != 1:
             raise AttributeError("More than 1 tournament")
@@ -76,9 +76,9 @@ class Tournament:
         """ """
         list_doc = cls.table.all()
         list_dict = [dict(doc) for doc in list_doc]
-        list_instance = [Tournament(**t_dict) for t_dict in list_dict]
+        # list_instance = [Tournament(**t_dict) for t_dict in list_dict]
 
-        return list_instance
+        return list_dict
 
     def add_player(self, ine_player: str):
 
@@ -86,6 +86,7 @@ class Tournament:
 
             if not ine_player in self.players_list:
                 self.players_list.append(ine_player)
+                self.table.update({'players_list': self.players_list}, Query().name == self.name)
                 return logging.warning("Joueur inscrit")
 
             else:
@@ -101,8 +102,10 @@ class Tournament:
         """ """
         if self.status == "created":
 
-            if len(players_list) <= self.MAX_PLAYERS - len(self.players_list):
+            while len(players_list) <= self.MAX_PLAYERS - len(self.players_list):
+
                 [self.players_list.append(p) for p in players_list]
+                self.table.update({'players_list': self.players_list}, Query().name == self.name)
                 return logging.warning("Joueurs inscrits")
 
             else:
@@ -112,4 +115,5 @@ class Tournament:
             return logging.warning("Attention : tournois non créé")
 
     def __repr__(self):
-        pass
+        rep = 'Tournois(' + self.name + ',' + self.place + str(self.players_list) + ')'
+        return rep

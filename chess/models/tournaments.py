@@ -18,7 +18,7 @@ class Tournament:
             start_date="",
             end_date="",
             rounds_number=4,
-            round=-1,
+            current_round=-1,
             rounds_list=[],
             players_list=[],
             description="",
@@ -31,7 +31,7 @@ class Tournament:
         self.start_date = start_date
         self.end_date = end_date
         self.rounds_number = rounds_number
-        self.round = round
+        self.current_round = current_round
         self.rounds_list = rounds_list
         self.players_list = players_list
         self.description = description
@@ -40,9 +40,6 @@ class Tournament:
     def create(self):
         """ """
         self.table.insert(self.__dict__)
-
-    def generate_matchs(self):
-        pass
 
     def remove_one(self):
         """ """
@@ -82,37 +79,60 @@ class Tournament:
 
     def add_player(self, ine_player: str):
 
-        if self.status == "created":
+        if (self.status == "created") and (self.n_players < self.MAX_PLAYERS):
 
-            if not ine_player in self.players_list:
+            if ine_player not in self.players_list:
                 self.players_list.append(ine_player)
                 self.table.update({'players_list': self.players_list}, Query().name == self.name)
-                return logging.warning("Joueur inscrit")
+                logging.warning("Joueur inscrit")
 
             else:
-                return logging.warning(" Attention : joueur déjà inscrit")
+                logging.warning(" Attention : joueur déjà inscrit")
 
-        elif len(self.players_list) == self.MAX_PLAYERS:
-            return logging.warning("Maximum de joueurs atteint")
+        elif self.n_players >= self.MAX_PLAYERS:
+            logging.warning("Maximum de joueurs atteint")
 
         else:
-            return logging.warning("Attention : tournois non créé")
+            logging.warning("Attention : tournois non créé")
 
     def add_players(self, players_list: list):
         """ """
-        if self.status == "created":
+        for player in players_list:
+            self.add_player(player)
 
-            while len(players_list) <= self.MAX_PLAYERS - len(self.players_list):
+    def start_tournament(self):
+        if (self.status == "created") and (self.n_players == self.MAX_PLAYERS):
+            self.status = "running"
+            # TODO: Voir avec Alex que status ne doit pas être un attribut public.
 
-                [self.players_list.append(p) for p in players_list]
-                self.table.update({'players_list': self.players_list}, Query().name == self.name)
-                return logging.warning("Joueurs inscrits")
-
-            else:
-                return logging.warning("Attention : Maximum de joueurs atteint")
-
+        elif self.status != "created":
+            logging.error(f"Erreur de status {self.status}")
         else:
-            return logging.warning("Attention : tournois non créé")
+            logging.error("problème nombre de players")
+
+    def create_new_round(self):
+        if self.current_round == -1:
+            self.current_round == 0
+            match_1 = self.players_list[0], self.players_list[1]
+            match_2 = self.players_list[2], self.players_list[3]
+            matchs_list = [match_1, match_2]
+            # pour le ppremier round, pas besoin de checker les socre donc osef. Que 4 perso.
+            r = Round(name, matchs_list, blabla)
+            r.created()
+            self.rounds_list.append(r.name)
+            return r.name
+        pass
+
+    def compute_scores(self):
+        pass
+
+    # def next_round(self):
+    #     #
+    #     pass
+
+    @property
+    def n_players(self):
+        return len(self.players_list)
 
     def __repr__(self):
         rep = 'Tournois(' + self.name + ',' + self.place + str(self.players_list) + ')'

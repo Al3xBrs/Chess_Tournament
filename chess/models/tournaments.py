@@ -1,7 +1,9 @@
-import logging
+import logging, random
 
 from chess.models.conf import DATA_TOURNAMENTS
 from tinydb import Query
+
+from chess.models.round import Round
 
 
 class Tournament:
@@ -62,8 +64,6 @@ class Tournament:
         Obj = Query()
         t_list = cls.table.search(Obj[data] == value)
 
-        # t_list = [Tournament(**i) for i in t_list]
-
         if len(t_list) != 1:
             raise AttributeError("More than 1 tournament")
         return t_list[0]
@@ -73,7 +73,6 @@ class Tournament:
         """ """
         list_doc = cls.table.all()
         list_dict = [dict(doc) for doc in list_doc]
-        # list_instance = [Tournament(**t_dict) for t_dict in list_dict]
 
         return list_dict
 
@@ -111,24 +110,28 @@ class Tournament:
             logging.error("problème nombre de players")
 
     def create_new_round(self):
-        if self.current_round == -1:
-            self.current_round == 0
-            match_1 = self.players_list[0], self.players_list[1]
-            match_2 = self.players_list[2], self.players_list[3]
+        if self.current_round == -1 and self.status == "running":
+            self.current_round += 1
+            shuffled_list = self.players_list
+            random.shuffle(shuffled_list)
+            match_1 = shuffled_list[0], shuffled_list[1]
+            match_2 = shuffled_list[2], shuffled_list[3]
             matchs_list = [match_1, match_2]
             # pour le ppremier round, pas besoin de checker les socre donc osef. Que 4 perso.
-            r = Round(name, matchs_list, blabla)
-            r.created()
+            r = Round("1", matchs_list)
+            r.create()
             self.rounds_list.append(r.name)
             return r.name
         pass
 
-    def compute_scores(self):
+    def compute_scores(self, current_round):
+        player.score = 1
+        player.score = 0.5
         pass
 
-    # def next_round(self):
-    #     #
-    #     pass
+    def next_round(self):
+        self.current_round += 1
+        pass
 
     @property
     def n_players(self):

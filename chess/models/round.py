@@ -38,9 +38,14 @@ class Round:
     #     self.matchs.append(match)
     #     return match
 
-    def winner(self, player):
-        if player == None:
-            pass
+    @classmethod
+    def winner(cls, player="both"):
+        if player == "both":
+            winner = None
+        else:
+            winner = player
+
+        return winner
 
     @classmethod
     def remove_all(cls):

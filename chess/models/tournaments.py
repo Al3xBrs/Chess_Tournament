@@ -111,22 +111,32 @@ class Tournament:
 
     def create_new_round(self):
         if self.current_round == -1 and self.status == "running":
-            self.current_round += 1
+            self.current_round += 2
+
             shuffled_list = self.players_list
             random.shuffle(shuffled_list)
             match_1 = shuffled_list[0], shuffled_list[1]
             match_2 = shuffled_list[2], shuffled_list[3]
             matchs_list = [match_1, match_2]
-            # pour le ppremier round, pas besoin de checker les socre donc osef. Que 4 perso.
             r = Round("1", matchs_list)
             r.create()
             self.rounds_list.append(r.name)
             return r.name
-        pass
 
-    def compute_scores(self, current_round):
-
-        pass
+    @classmethod
+    def compute_scores(cls, r):
+        for match in r.matchs_list:
+            winner = r.winner()
+            player1 = match[0]
+            player2 = match[1]
+            if not winner:
+                player1.tournament_score += 0.5
+                player2.tournament_score += 0.5
+            elif winner == player1:
+                player1.tournament_score += 1
+            else:
+                player2.tournament_score += 1
+            return player1.tournament_score, player2.tournament_score
 
     def next_round(self):
         self.current_round += 1

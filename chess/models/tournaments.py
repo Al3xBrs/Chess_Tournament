@@ -125,8 +125,7 @@ class Tournament:
         pass
 
     def compute_scores(self, current_round):
-        player.score = 1
-        player.score = 0.5
+
         pass
 
     def next_round(self):

@@ -2,7 +2,7 @@ import logging, random
 
 from chess.models.conf import DATA_TOURNAMENTS
 from tinydb import Query
-
+from chess.models.players import Player
 from chess.models.round import Round
 
 
@@ -20,7 +20,7 @@ class Tournament:
             start_date="",
             end_date="",
             rounds_number=4,
-            current_round=-1,
+            current_round=0,
             rounds_list=[],
             players_list=[],
             description="",
@@ -77,7 +77,7 @@ class Tournament:
         return list_dict
 
     def add_player(self, ine_player: str):
-
+        """ """
         if (self.status == "created") and (self.n_players < self.MAX_PLAYERS):
 
             if ine_player not in self.players_list:
@@ -100,6 +100,7 @@ class Tournament:
             self.add_player(player)
 
     def start_tournament(self):
+        """ """
         if (self.status == "created") and (self.n_players == self.MAX_PLAYERS):
             self.status = "running"
             # TODO: Voir avec Alex que status ne doit pas être un attribut public.
@@ -110,42 +111,69 @@ class Tournament:
             logging.error("problème nombre de players")
 
     def create_new_round(self):
-        if self.current_round == -1 and self.status == "running":
-            self.current_round += 2
+        """ """
+        if self.current_round == 0 and self.status == "running":
+            self.current_round += 1
 
             shuffled_list = self.players_list
             random.shuffle(shuffled_list)
-            match_1 = shuffled_list[0], shuffled_list[1]
-            match_2 = shuffled_list[2], shuffled_list[3]
-            matchs_list = [match_1, match_2]
+            match_1 = (shuffled_list[0], 0), (shuffled_list[1], 0)
+            match_2 = (shuffled_list[2], 0), (shuffled_list[3], 0)
+            matchs_list = (match_1, match_2)
             r = Round("1", matchs_list)
             r.create()
             self.rounds_list.append(r.name)
             return r.name
 
-    @classmethod
-    def compute_scores(cls, r):
-        for match in r.matchs_list:
-            winner = r.winner()
-            player1 = match[0]
-            player2 = match[1]
-            if not winner:
-                player1.tournament_score += 0.5
-                player2.tournament_score += 0.5
-            elif winner == player1:
-                player1.tournament_score += 1
-            else:
-                player2.tournament_score += 1
-            return player1.tournament_score, player2.tournament_score
+    @property
+    def scores(self):
+        """ """
+        if (self.status == "created") or (not self.current_round):
+            scores = {player_ine: 0 for player_ine in self.players_list}
+            return scores
+
+        points_list = []
+
+        for round_name in self.rounds_list:
+            rounde = Round.find_one("name", round_name)
+            for match in rounde.matchs_list:
+                points_list.append(match[0])
+                points_list.append(match[1])
+
+        scores = {player_ine: 0 for player_ine in self.players_list}
+        for k, val in points_list:
+            scores[k] += val
+
+        logging.warning(points_list)
+
+        logging.warning(scores)
+
+        return scores
+
+        # for match in r.matchs_list:
+        #     winner = r.winner()
+        #     player1 = match[0]
+        #     player2 = match[1]
+        #     if not winner:
+        #         player1.tournament_score += 0.5
+        #         player2.tournament_score += 0.5
+        #     elif winner == player1:
+        #         player1.tournament_score += 1
+        #     else:
+        #         player2.tournament_score += 1
+        #     return player1.tournament_score, player2.tournament_score
 
     def next_round(self):
+        """ """
         self.current_round += 1
         pass
 
     @property
     def n_players(self):
+        """ """
         return len(self.players_list)
 
     def __repr__(self):
+        """ """
         rep = 'Tournois(' + self.name + ',' + self.place + str(self.players_list) + ')'
         return rep

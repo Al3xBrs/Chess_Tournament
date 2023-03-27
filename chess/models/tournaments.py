@@ -103,6 +103,8 @@ class Tournament:
         """ """
         if (self.status == "created") and (self.n_players == self.MAX_PLAYERS):
             self.status = "running"
+            self.table.update({'status': self.status}, Query().name == self.name)
+
             # TODO: Voir avec Alex que status ne doit pas être un attribut public.
 
         elif self.status != "created":
@@ -114,23 +116,26 @@ class Tournament:
         """ """
         if self.current_round == 0 and self.status == "running":
             self.current_round += 1
+            self.table.update({'current_round': self.current_round}, Query().name == self.name)
 
             shuffled_list = self.players_list
             random.shuffle(shuffled_list)
-            match_1 = (shuffled_list[0], 0), (shuffled_list[1], 0)
-            match_2 = (shuffled_list[2], 0), (shuffled_list[3], 0)
-            matchs_list = (match_1, match_2)
+            match_1 = (f"{shuffled_list[0]}", 0), (f"{shuffled_list[1]}", 0)
+            match_2 = (f"{shuffled_list[2]}", 0), (f"{shuffled_list[3]}", 0)
+            matchs_list = [match_1, match_2]
             r = Round("1", matchs_list)
             r.create()
             self.rounds_list.append(r.name)
+            self.table.update({"rounds_list": self.rounds_list}, Query().name == self.name)
             return r.name
 
     @property
     def scores(self):
         """ """
-        if (self.status == "created") or (not self.current_round):
-            scores = {player_ine: 0 for player_ine in self.players_list}
-            return scores
+        if (self.status == "created") or (self.current_round == 1):
+            scores_dict = {player_ine: 0 for player_ine in self.players_list}
+
+            return scores_dict
 
         points_list = []
 
@@ -150,23 +155,29 @@ class Tournament:
 
         return scores
 
-        # for match in r.matchs_list:
-        #     winner = r.winner()
-        #     player1 = match[0]
-        #     player2 = match[1]
-        #     if not winner:
-        #         player1.tournament_score += 0.5
-        #         player2.tournament_score += 0.5
-        #     elif winner == player1:
-        #         player1.tournament_score += 1
-        #     else:
-        #         player2.tournament_score += 1
-        #     return player1.tournament_score, player2.tournament_score
-
     def next_round(self):
         """ """
+        current_round = Round.find_one("name", f"{self.current_round}")
+        current_round.end()
+        previous_round_matchs = current_round.matchs_list
+        scores = self.scores
         self.current_round += 1
-        pass
+        self.table.update({"current_round": self.current_round}, Query().name == self.name)
+        if self.current_round > self.rounds_number:
+            self.status = "closed"
+            self.table.update({"status": self.status}, Query().name == self.name)
+
+            logging.warning("Tournois terminé !")
+        else:
+            new_round = Round(f"{self.current_round}", previous_round_matchs)
+            new_round.create()
+            self.rounds_list.append(new_round.name)
+            self.table.update({"rounds_list": self.rounds_list}, Query().name == self.name)
+            sorted_list = sorted(scores.items(), key=lambda x: x[1])
+            match_1 = (f"{sorted_list[3]}", f"{sorted_list[2]}")
+            match_2 = (f"{sorted_list[1]}", f"{sorted_list[0]}")
+            new_matchs_list = [match_1, match_2]
+            print(new_matchs_list)
 
     @property
     def n_players(self):

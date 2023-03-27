@@ -157,27 +157,29 @@ class Tournament:
 
     def next_round(self):
         """ """
-        current_round = Round.find_one("name", f"{self.current_round}")
-        current_round.end()
-        previous_round_matchs = current_round.matchs_list
-        scores = self.scores
+        previous_round = Round.find_one("name", f"{self.current_round}")
+        previous_round.end()
+
         self.current_round += 1
         self.table.update({"current_round": self.current_round}, Query().name == self.name)
+
         if self.current_round > self.rounds_number:
             self.status = "closed"
             self.table.update({"status": self.status}, Query().name == self.name)
 
             logging.warning("Tournois terminé !")
+
         else:
-            new_round = Round(f"{self.current_round}", previous_round_matchs)
-            new_round.create()
+
+            scores = self.scores
+            sorted_dict = sorted(scores.items(), key=lambda x: x[1])
+            match_1 = sorted_dict[3], sorted_dict[2]
+            match_2 = sorted_dict[1], sorted_dict[0]
+            new_matchs_list = [match_1, match_2]
+            new_round = Round(f"{self.current_round}", new_matchs_list)
             self.rounds_list.append(new_round.name)
             self.table.update({"rounds_list": self.rounds_list}, Query().name == self.name)
-            sorted_list = sorted(scores.items(), key=lambda x: x[1])
-            match_1 = (f"{sorted_list[3]}", f"{sorted_list[2]}")
-            match_2 = (f"{sorted_list[1]}", f"{sorted_list[0]}")
-            new_matchs_list = [match_1, match_2]
-            print(new_matchs_list)
+            new_round.create()
 
     @property
     def n_players(self):

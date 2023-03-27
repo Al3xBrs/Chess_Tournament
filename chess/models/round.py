@@ -9,7 +9,7 @@ class Round:
     """ """
     table = DATA_ROUNDS
 
-    def __init__(self, name, matchs_list, date_hour_start="", date_hour_end=""):
+    def __init__(self, name, matchs_list=[], date_hour_start="", date_hour_end=""):
         """ """
         self.name = name
         self.matchs_list = matchs_list
@@ -48,6 +48,9 @@ class Round:
             raise AttributeError("more than 1 round")
 
         return r_list[0]
+
+    def update(self, data, value):
+        self.table.update({data: value}, Query().name == self.name)
 
     def end(self):
         """ """

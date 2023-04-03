@@ -156,6 +156,18 @@ class Tournament:
 
         return scores
 
+
+    def have_already_played(self, player_x, player_0):
+        matchs_lists = []
+        current_round = Round.find_one("name", f"{self.current_round}")
+        for match in current_round.matchs_list:
+            matchs_lists.append(match)
+
+        if [player_x, player_0] or [player_0, player_x] in matchs_lists:
+            pass
+
+
+
     # TODO : Tester avec def compute_round():
     def next_round(self):
         """ """
@@ -174,9 +186,6 @@ class Tournament:
         scores = self.scores
         sorted_dict = sorted(scores.items(), key=lambda x: x[1])
 
-
-        # il faut pas que les paires de joueurs déjà rencontrées se re-rencontrent. Trier par nombre de point.
-        # il faut pas qu'un joueur joue pas contre soi-même.
         players_selected = []
         players_not_selected = [] # sorted_dict.keys ?
         new_match_list = []

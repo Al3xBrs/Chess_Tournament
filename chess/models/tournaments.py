@@ -176,6 +176,12 @@ class Tournament:
             match_1 = sorted_dict[3], sorted_dict[2]
             match_2 = sorted_dict[1], sorted_dict[0]
             new_matchs_list = [match_1, match_2]
+            previous_matchs_list = previous_round.matchs_list
+            if previous_matchs_list == new_matchs_list:
+                match_1 = sorted_dict[3], sorted_dict[1]
+                match_2 = sorted_dict[2], sorted_dict[0]
+                new_matchs_list = [match_1, match_2]
+
             new_round = Round(f"{self.current_round}", new_matchs_list)
             self.rounds_list.append(new_round.name)
             self.table.update({"rounds_list": self.rounds_list}, Query().name == self.name)

@@ -9,6 +9,7 @@ class Round:
     """ """
     table = DATA_ROUNDS
 
+    # TODO : Utiliser le modèle SECRET pour identifiant round/tournois
     def __init__(self, name, matchs_list=[], date_hour_start="", date_hour_end=""):
         """ """
         self.name = name

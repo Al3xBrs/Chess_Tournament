@@ -8,7 +8,7 @@ t1.create()
 list_players = ["AB12345", "AL54321", "JL45678", "AB87654"]
 t1.add_players(list_players)
 t1.start_tournament()
-t1.create_new_round()
+t1.create_first_round()
 t1.next_round()
 t1.next_round()
 t1.next_round()

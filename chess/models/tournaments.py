@@ -20,7 +20,7 @@ class Tournament:
             start_date="",
             end_date="",
             rounds_number=4,
-            current_round=0,
+            current_round=-1,
             rounds_list=[],
             players_list=[],
             description="",
@@ -105,8 +105,6 @@ class Tournament:
             self.status = "running"
             self.table.update({'status': self.status}, Query().name == self.name)
 
-            # TODO: Voir avec Alex que status ne doit pas être un attribut public.
-
         elif self.status != "created":
             logging.error(f"Erreur de status {self.status}")
         else:
@@ -114,7 +112,7 @@ class Tournament:
 
     def create_first_round(self):
         """ """
-        if self.current_round == 0 and self.status == "running":
+        if self.current_round == -1 and self.status == "running":
             self.current_round += 1
             self.table.update({'current_round': self.current_round}, Query().name == self.name)
 
@@ -123,25 +121,24 @@ class Tournament:
             match_1 = (f"{shuffled_list[0]}", 0), (f"{shuffled_list[1]}", 0)
             match_2 = (f"{shuffled_list[2]}", 0), (f"{shuffled_list[3]}", 0)
             matchs_list = [match_1, match_2]
-            # TODO : Utiliser Secret ID
-            r = Round("1", matchs_list)
+            r = Round(matchs_list)
             r.create()
-            self.rounds_list.append(r.name)
+            self.rounds_list.append(r.round_id)
             self.table.update({"rounds_list": self.rounds_list}, Query().name == self.name)
-            return r.name
+            return r.round_id
 
     @property
     def scores(self):
         """ """
-        if (self.status == "created") or (self.current_round == 1):
+        if (self.status == "created") or (self.current_round == 0):
             scores_dict = {player_ine: 0 for player_ine in self.players_list}
 
             return scores_dict
 
         points_list = []
 
-        for round_name in self.rounds_list:
-            rounde = Round.find_one("name", round_name)
+        for round_id in self.rounds_list:
+            rounde = Round.find_one("round_id", round_id)
             for match in rounde.matchs_list:
                 points_list.append(match[0])
                 points_list.append(match[1])
@@ -156,71 +153,52 @@ class Tournament:
 
         return scores
 
+    @classmethod
+    def have_already_played(cls, player_x, player_0):
+        previous_matchs_lists = Round.get_previous_matchs()
+        print("previous matchs list :", previous_matchs_lists)
+        if [[player_x, any], [player_0, any]] or [[player_0, any], [player_x, any]] in previous_matchs_lists:
+            return True
 
-    def have_already_played(self, player_x, player_0):
-        matchs_lists = []
-        current_round = Round.find_one("name", f"{self.current_round}")
-        for match in current_round.matchs_list:
-            matchs_lists.append(match)
-
-        if [player_x, player_0] or [player_0, player_x] in matchs_lists:
-            pass
-
-
-
-    # TODO : Tester avec def compute_round():
     def next_round(self):
         """ """
-        previous_round = Round.find_one("name", f"{self.rounds_list[self.current_round]}")
+        previous_round = Round.find_one("round_id", f"{self.rounds_list[self.current_round]}")
         previous_round.end()
 
         self.current_round += 1
         self.table.update({"current_round": self.current_round}, Query().name == self.name)
 
-        if self.current_round > self.rounds_number:
+        if self.current_round >= self.rounds_number:
             self.status = "closed"
             self.table.update({"status": self.status}, Query().name == self.name)
 
             return logging.warning("Tournois terminé !")
 
         scores = self.scores
-        sorted_dict = sorted(scores.items(), key=lambda x: x[1])
-
-        players_selected = []
-        players_not_selected = [] # sorted_dict.keys ?
+        sorted_list = sorted(scores.items(), key=lambda x: x[1])
+        print("sorted_list: ", sorted_list)
+        players_not_selected = [player for (player, score) in sorted_list]
+        print("players not selected : ", players_not_selected)
         new_match_list = []
         while len(players_not_selected) > 0:
 
             player_0 = players_not_selected[0]
 
             for player_x in players_not_selected:
-
-                # TODO : COder have already played
+                print("player_x : ", player_x)
+                # TODO : ATTENTION
                 if self.have_already_played(player_x, player_0) or (player_x == player_0):
-
                     continue
 
-            match_1 = ([player_x, 0], ([player_0, 0])
-            new_match_list.append(match_1)
-            players_selected.append(player_1)
-            players_selected.append(player_0)
-            #meme chose pour les supprimer de not selected
-            # chercher un module qui supprime l'élément d'une liste, puis apppend.
+                match_1 = ([player_x, 0], [player_0, 0])
+                new_match_list.append(match_1)
+                players_not_selected.remove(player_x)
+                print("players not selected : ", players_not_selected)
+
             break
 
-
-
-
-
-
-        # previous_matchs_list = previous_round.matchs_list
-        # if previous_matchs_list == new_matchs_list:
-        #     match_1 = sorted_dict[3], sorted_dict[1]
-        #     match_2 = sorted_dict[2], sorted_dict[0]
-        #     new_matchs_list = [match_1, match_2]
-
-        new_round = Round(f"{self.current_round}", new_match_list)
-        self.rounds_list.append(new_round.name)
+        new_round = Round(new_match_list)
+        self.rounds_list.append(new_round.round_id)
         self.table.update({"rounds_list": self.rounds_list}, Query().name == self.name)
         new_round.create()
 

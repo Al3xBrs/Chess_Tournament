@@ -130,35 +130,127 @@ class Tournament:
     @property
     def scores(self):
         """ """
-        if (self.status == "created") or (self.current_round == 0):
-            scores_dict = {player_ine: 0 for player_ine in self.players_list}
+        if not self.n_players:
+            return {}
 
-            return scores_dict
+            # no score before 1st round
 
-        points_list = []
+        scores = {id_player: 0 for id_player in self.players_list}
+        if self.current_round < 1:
+            return scores
 
+        # else
         for round_id in self.rounds_list:
-            rounde = Round.find_one("round_id", round_id)
-            for match in rounde.matchs_list:
-                points_list.append(match[0])
-                points_list.append(match[1])
-
-        scores = {player_ine: 0 for player_ine in self.players_list}
-        for k, val in points_list:
-            scores[k] += val
-
-        logging.warning(points_list)
-
-        logging.warning(scores)
+            ronde = Round.find_one("round_id", round_id)
+            matchs_list = ronde.matchs_list
+            for match in matchs_list:
+                scores[match[0][0]] += match[0][1]
+                scores[match[1][0]] += match[1][1]
 
         return scores
 
-    @classmethod
-    def have_already_played(cls, player_x, player_0):
-        previous_matchs_lists = Round.get_previous_matchs()
-        print("previous matchs list :", previous_matchs_lists)
-        if [[player_x, any], [player_0, any]] or [[player_0, any], [player_x, any]] in previous_matchs_lists:
-            return True
+    @property
+    def classement(self):
+        """ """
+        classement = [(i, j) for i, j in self.scores.items()]
+        classement = sorted(classement, key=lambda i: i[1], reverse=True)
+        classement = [i[0] for i in classement]
+        self.players_list = classement
+        return classement
+
+    def have_already_played(self, player_x, player_0):
+        """"""
+        flatten_match_list = []
+        for round_id in self.rounds_list:
+            rounde = Round.find_one("round_id", round_id)
+
+            matchs_list = rounde.matchs_list
+            print("match list ancien :", matchs_list)
+            for match in matchs_list:
+                m = (match[0][0], match[1][0])
+                flatten_match_list.append(m)
+        print("flatten match list : ", flatten_match_list)
+        cand_match = (player_0, player_x)
+
+        for match in flatten_match_list:
+            print("macth", match, "cand_match", cand_match)
+            if match == cand_match:
+                return True
+
+        cand_match = (player_x, player_0)
+        for match in flatten_match_list:
+            print("macth", match, "cand_match", cand_match)
+            if match == cand_match:
+                return True
+
+        return False
+
+    def compute_round(self):
+        """define the roundes"""
+
+        logging.warning("_compute_ronde  called")
+
+        # seulement si c'est la 1er la current_round 0
+        if self.current_round == 0:
+            logging.warning("not self._current_round:")
+
+            # TODO SHUFFLE LEN IMAGE
+
+            # we need 3 object storage
+            match_list = []
+            players_choisis = []
+            players_non_choisis = [i for i in self.players_list]
+
+            while len(players_non_choisis) != 0:
+                # just to be more readable
+                p1 = players_non_choisis[0]
+                p2 = players_non_choisis[1]
+
+                # match and match list
+                match = [(p1, 0), (p2, 0)]
+                match_list.append(match)
+
+                # update players_choisis & non choisis
+                players_choisis.extend([p1, p2])
+                players_non_choisis.remove(p1)
+                players_non_choisis.remove(p2)
+
+            return match_list
+
+        # else
+        match_list = []
+        players_choisis = []
+        self.players_list = self.classement
+        players_non_choisis = [i for i in self.players_list]
+
+        i = 0
+        while len(players_non_choisis) != 0:
+            p1 = players_non_choisis[i]
+
+            if p1 in players_choisis:
+                continue
+
+            for p_id in self.players_list:
+                if p1 == p_id:
+                    continue
+
+                if p_id in players_choisis:
+                    continue
+
+                already_played = self.have_already_played(p1, p_id)
+                if not already_played:
+                    break
+
+                # match and match list
+                match = [(p1, 0), (p_id, 0)]
+                match_list.append(match)
+
+                # update players_choisis & non choisis
+                players_choisis.extend([p1, p_id])
+                players_non_choisis.remove(p1)
+                players_non_choisis.remove(p_id)
+
+        return match_list
 
     def next_round(self):
         """ """
@@ -173,30 +265,8 @@ class Tournament:
             self.table.update({"status": self.status}, Query().name == self.name)
 
             return logging.warning("Tournois terminé !")
-
-        scores = self.scores
-        sorted_list = sorted(scores.items(), key=lambda x: x[1])
-        print("sorted_list: ", sorted_list)
-        players_not_selected = [player for (player, score) in sorted_list]
-        print("players not selected : ", players_not_selected)
-        new_match_list = []
-        while len(players_not_selected) > 0:
-
-            player_0 = players_not_selected[0]
-
-            for player_x in players_not_selected:
-                print("player_x : ", player_x)
-                # TODO : ATTENTION
-                if self.have_already_played(player_x, player_0) or (player_x == player_0):
-                    continue
-
-                match_1 = ([player_x, 0], [player_0, 0])
-                new_match_list.append(match_1)
-                players_not_selected.remove(player_x)
-                print("players not selected : ", players_not_selected)
-
-            break
-
+        new_match_list = self.compute_round()
+        print("new match list : ", new_match_list)
         new_round = Round(new_match_list)
         self.rounds_list.append(new_round.round_id)
         self.table.update({"rounds_list": self.rounds_list}, Query().name == self.name)

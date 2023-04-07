@@ -165,21 +165,21 @@ class Tournament:
             rounde = Round.find_one("round_id", round_id)
 
             matchs_list = rounde.matchs_list
-            print("match list ancien :", matchs_list)
+
             for match in matchs_list:
                 m = (match[0][0], match[1][0])
                 flatten_match_list.append(m)
-        print("flatten match list : ", flatten_match_list)
+
         cand_match = (player_0, player_x)
 
         for match in flatten_match_list:
-            print("macth", match, "cand_match", cand_match)
+
             if match == cand_match:
                 return True
 
         cand_match = (player_x, player_0)
         for match in flatten_match_list:
-            print("macth", match, "cand_match", cand_match)
+
             if match == cand_match:
                 return True
 
@@ -266,7 +266,7 @@ class Tournament:
 
             return logging.warning("Tournois terminé !")
         new_match_list = self.compute_round()
-        print("new match list : ", new_match_list)
+        
         new_round = Round(new_match_list)
         self.rounds_list.append(new_round.round_id)
         self.table.update({"rounds_list": self.rounds_list}, Query().name == self.name)

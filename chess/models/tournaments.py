@@ -175,14 +175,16 @@ class Tournament:
         for match in flatten_match_list:
 
             if match == cand_match:
+                print("Have_m : true")
                 return True
 
         cand_match = (player_x, player_0)
         for match in flatten_match_list:
 
             if match == cand_match:
+                print("Have_m : true")
                 return True
-
+        print("Have_m : False")
         return False
 
     def compute_round(self):
@@ -212,6 +214,7 @@ class Tournament:
 
                 # update players_choisis & non choisis
                 players_choisis.extend([p1, p2])
+
                 players_non_choisis.remove(p1)
                 players_non_choisis.remove(p2)
 
@@ -242,13 +245,14 @@ class Tournament:
                     break
 
                 # match and match list
-                match = [(p1, 0), (p_id, 0)]
-                match_list.append(match)
+            match = [(p1, 0), (p_id, 0)]
+            match_list.append(match)
 
-                # update players_choisis & non choisis
-                players_choisis.extend([p1, p_id])
-                players_non_choisis.remove(p1)
-                players_non_choisis.remove(p_id)
+            # update players_choisis & non choisis
+            players_choisis.extend([p1, p_id])
+            print("pid: ", p_id, "non pl list ; ", players_non_choisis, "pl list : ", players_choisis)
+            players_non_choisis.remove(p_id)
+            players_non_choisis.remove(p1)
 
         return match_list
 
@@ -266,7 +270,7 @@ class Tournament:
 
             return logging.warning("Tournois terminé !")
         new_match_list = self.compute_round()
-        
+
         new_round = Round(new_match_list)
         self.rounds_list.append(new_round.round_id)
         self.table.update({"rounds_list": self.rounds_list}, Query().name == self.name)

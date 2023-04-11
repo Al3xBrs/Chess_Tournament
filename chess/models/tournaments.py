@@ -194,8 +194,6 @@ class Tournament:
         if self.current_round == 0:
             logging.warning("not self._current_round:")
 
-            # TODO SHUFFLE LEN IMAGE
-
             # we need 3 object storage
             match_list = []
             players_choisis = []
@@ -249,7 +247,7 @@ class Tournament:
             # update players_choisis & non choisis
             players_choisis.extend([p1, p_id])
             print("pid: ", p_id, "non pl list ; ", players_non_choisis, "pl list : ", players_choisis)
-            # TODO: Check pourquoi erreur ici.
+            # TODO: If pas possible, refaire meme match
             players_non_choisis.remove(p_id)
             players_non_choisis.remove(p1)
 

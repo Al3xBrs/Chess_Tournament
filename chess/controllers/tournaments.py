@@ -95,10 +95,13 @@ def scores_round_controller(payload):
         players_list = match
         choice = scores_round_view(players_list)
         if choice == "1":
+            # TODO : Return new_match_list = [("dhdhdh", 1), ("dfhdjfksh", 0)]
             pass
         if choice == "2":
+            # TODO : Return new_match_list = [("dhdhdh", 0), ("dfhdjfksh", 1)]
             pass
         if choice == "3":
+            # TODO : Return new_match_list = [("dhdhdh", 0,5), ("dfhdjfksh", 0,5)]
             pass
         if choice == "4":
             return "started_tournament_controller", payload

@@ -106,11 +106,11 @@ def update_tournament_view(tournament):
     return [inp1, inp2]
 
 
-def scores_round_view(players_list):
+def scores_round_view(match):
     """"""
     print(f"""
         ------- Scores -------
-        {players_list}
+        {match}
         (1) Joueur 1 à gagné
         (2) Joueur 2 à gagné 
         (3) Match nul

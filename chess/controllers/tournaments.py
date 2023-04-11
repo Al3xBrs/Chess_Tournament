@@ -92,17 +92,21 @@ def scores_round_controller(payload):
     rounde_id = tournament.rounds_list[tournament.current_round]
     rounde = Round.find_one("round_id", rounde_id)
     for match in rounde.matchs_list:
-        players_list = match
-        choice = scores_round_view(players_list)
+
+        choice = scores_round_view(match)
         if choice == "1":
             # TODO : Return new_match_list = [("dhdhdh", 1), ("dfhdjfksh", 0)]
-            pass
+            match[0][1] = 1
+
         if choice == "2":
             # TODO : Return new_match_list = [("dhdhdh", 0), ("dfhdjfksh", 1)]
-            pass
+            match[1][1] = 1
+
         if choice == "3":
             # TODO : Return new_match_list = [("dhdhdh", 0,5), ("dfhdjfksh", 0,5)]
-            pass
+            match[0][1] = 0.5
+            match[1][1] = 0.5
+
         if choice == "4":
             return "started_tournament_controller", payload
         if choice == "5":

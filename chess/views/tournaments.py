@@ -1,20 +1,20 @@
 import logging
 
 
-def tournaments_menu_view():
+def tournaments_menu_view(n_tournament_running):
     """
     Affiche le menu des tournois
     """
-    print("""
+    print(f"""
         ------- Menu Tournois -------
     (1) Créer un tournois
     (2) Accéder à un tournois
-    (3) 
-    (4) Retour 
+    (3) Tournois en cours ({n_tournament_running})
+    (4) Retour (Menu principal)
         ------- Menu Tournois -------
     """)
 
-    return int(input("Choix : "))
+    return input("Choix : ")
 
 
 def tournaments_create_view():
@@ -23,13 +23,10 @@ def tournaments_create_view():
     """
     print("""
         ------- Création Tournois -------
-    (4) Retour 
-    (q) Menu principal
-        ------- Création Tournois -------
-    """)
+""")
     name = input("Entrer le nom du tournois : ")
     place = input("Entrer le lieu du tournois : ")
-    start_place = input("Entrer la date du début du tournois : ")
+    start_date = input("Entrer la date du début du tournois : ")
     end_date = input("Entrer la date de fin du tournois : ")
     desc_choice = input("Souhaitez-vous ajouter une description ? (y/n)")
     desc = ""
@@ -41,17 +38,17 @@ def tournaments_create_view():
         rounds_number = input("Entrer le nombre de tour : ")
 
     logging.warning("Tournois créé")
-    return name, place, start_place, end_date, desc, rounds_number
+    return name, place, start_date, end_date, desc, rounds_number
 
 
-def add_players_tournaments_view(tournament):
+def sub_menu_tournament_view(tournament):
     """"""
 
     print(f"""
         ------- Création Tournois -------
     {tournament}
     (1) Commencer le tournois
-    (2) Modifier le tournois
+    (2) Modifier le tournois / les joueurs
     (3) Mettre fin au tournois
     (4) Retour
     (q) Menu principal 
@@ -60,13 +57,13 @@ def add_players_tournaments_view(tournament):
     return input("Choix : ")
 
 
-def started_tournament_view(tournament, round):
+def started_tournament_view(tournament, rounde):
     """"""
 
     print(f"""
         ------- Tournois en cours -------
     {tournament}
-    {round}
+    Round : {rounde}
     (1) Rentrer les scores pour ce round
     (2) Annuler le round
     (3) Terminer le tournois
@@ -134,3 +131,14 @@ def cancel_round_view(round):
     """)
 
     return input("Souhaitez-vous annuler le round ? (y/n)")
+
+
+def cancel_tournament_view(tournament):
+    """ """
+    print(f"""
+        ------- Annulation du tournois -------
+    {tournament}
+    (4) Retour
+    (q) Menu principal
+    """)
+    return input("Souhaitez-vous annuler le tournois ? (y/n)")

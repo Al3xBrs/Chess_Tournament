@@ -25,6 +25,11 @@ class Round:
         """ """
         cls.table.truncate()
 
+    def remove_one(self):
+        """ """
+        Obj = Query()
+        self.table.remove(Obj.round_id == self.round_id)
+
     @classmethod
     def find_one(cls, data, value):
         """ """

@@ -103,7 +103,6 @@ class Tournament:
         """ """
         if (self.status == "created") and (self.n_players == self.MAX_PLAYERS):
             self.status = "running"
-            self.table.update({'status': self.status}, Query().name == self.name)
 
         elif self.status != "created":
             logging.error(f"Erreur de status {self.status}")
@@ -114,7 +113,6 @@ class Tournament:
         """ """
         if self.current_round == -1 and self.status == "running":
             self.current_round += 1
-            self.table.update({'current_round': self.current_round}, Query().name == self.name)
 
             shuffled_list = self.players_list
             random.shuffle(shuffled_list)
@@ -251,6 +249,7 @@ class Tournament:
             # update players_choisis & non choisis
             players_choisis.extend([p1, p_id])
             print("pid: ", p_id, "non pl list ; ", players_non_choisis, "pl list : ", players_choisis)
+            # TODO: Check pourquoi erreur ici.
             players_non_choisis.remove(p_id)
             players_non_choisis.remove(p1)
 

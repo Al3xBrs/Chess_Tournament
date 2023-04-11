@@ -15,8 +15,7 @@ class Player:
             prenom: str,
             date_naissance: str,
             ine: str,
-            total_score: int = 0,
-            tournament_score: int = 0,
+            score: int = 0,
 
     ) -> None:
         """Initialisation du joueur.
@@ -33,8 +32,7 @@ class Player:
         self.prenom = prenom
         self.date_naissance = date_naissance
         self.ine = ine
-        self.total_score = total_score
-        self.tournament_score = tournament_score
+        self.score = score
 
     def create(self):
         """

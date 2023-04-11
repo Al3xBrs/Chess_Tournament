@@ -11,7 +11,7 @@ def main_menu_controller(payload):
     if choice == "1":
         return "players_menu_controller", payload
     elif choice == "2":
-        pass
+        return "tournaments_menu_controller", payload
     elif choice == "q":
         raise KeyboardInterrupt("Bye Bye")
 

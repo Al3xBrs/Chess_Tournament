@@ -43,6 +43,11 @@ class Tournament:
         """ """
         self.table.insert(self.__dict__)
 
+    def end_tournament(self):
+        """ """
+        Obj = Query()
+        self.table.update({"status": "closed"}, Obj.name == self.name)
+
     def remove_one(self):
         """ """
         Obj = Query()
@@ -103,6 +108,7 @@ class Tournament:
         """ """
         if (self.status == "created") and (self.n_players == self.MAX_PLAYERS):
             self.status = "running"
+            self.table.update({"status": self.status}, Query().name == self.name)
 
         elif self.status != "created":
             logging.error(f"Erreur de status {self.status}")
@@ -113,6 +119,7 @@ class Tournament:
         """ """
         if self.current_round == -1 and self.status == "running":
             self.current_round += 1
+            self.table.update({"current_round": self.current_round}, Query().name == self.name)
 
             shuffled_list = self.players_list
             random.shuffle(shuffled_list)
@@ -151,9 +158,13 @@ class Tournament:
     def classement(self):
         """ """
         classement = [(i, j) for i, j in self.scores.items()]
+
         classement = sorted(classement, key=lambda i: i[1], reverse=True)
+
         classement = [i[0] for i in classement]
         self.players_list = classement
+        self.table.update({"players_list": self.players_list}, Query().name == self.name)
+
         return classement
 
     def have_already_played(self, player_x, player_0):
@@ -173,16 +184,14 @@ class Tournament:
         for match in flatten_match_list:
 
             if match == cand_match:
-                print("Have_m : true")
                 return True
 
         cand_match = (player_x, player_0)
         for match in flatten_match_list:
 
             if match == cand_match:
-                print("Have_m : true")
                 return True
-        print("Have_m : False")
+
         return False
 
     def compute_round(self):
@@ -246,9 +255,9 @@ class Tournament:
 
             # update players_choisis & non choisis
             players_choisis.extend([p1, p_id])
-            print("pid: ", p_id, "non pl list ; ", players_non_choisis, "pl list : ", players_choisis)
-            # TODO: If pas possible, refaire meme match
-            players_non_choisis.remove(p_id)
+
+            if p_id in players_non_choisis:
+                players_non_choisis.remove(p_id)
             players_non_choisis.remove(p1)
 
         return match_list
@@ -261,7 +270,7 @@ class Tournament:
         self.current_round += 1
         self.table.update({"current_round": self.current_round}, Query().name == self.name)
 
-        if self.current_round >= self.rounds_number:
+        if int(self.current_round) >= int(self.rounds_number):
             self.status = "closed"
             self.table.update({"status": self.status}, Query().name == self.name)
 
@@ -269,6 +278,7 @@ class Tournament:
         new_match_list = self.compute_round()
 
         new_round = Round(new_match_list)
+
         self.rounds_list.append(new_round.round_id)
         self.table.update({"rounds_list": self.rounds_list}, Query().name == self.name)
         new_round.create()

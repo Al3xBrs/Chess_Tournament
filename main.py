@@ -20,7 +20,8 @@ routes = {
     "cancel_round_controller": cancel_round_controller,
     "scores_round_controller": scores_round_controller,
     "end_tournament_controller": end_tournament_controller,
-    
+    "next_round_controller": next_round_controller,
+
 }
 
 

@@ -74,7 +74,7 @@ def started_tournament_view(tournament, rounde):
     return input("Choix : ")
 
 
-def end_tournament_view(tournament):
+def end_tournament_view(tournament, player_1, player_2, player_3):
     """"""
 
     print(f"""
@@ -82,7 +82,11 @@ def end_tournament_view(tournament):
     {tournament}
     Tournois terminé !
     
-    (4) Retour
+    Voici le podium :
+    {player_1}
+    {player_2}
+    {player_3}
+
     (q) Menu principal
         ------- Fin du tournois -------
     """)
@@ -114,11 +118,22 @@ def scores_round_view(match):
         (1) Joueur 1 à gagné
         (2) Joueur 2 à gagné 
         (3) Match nul
-        (4) Retour
-        (q) Menu principal 
         ------- Scores -------
         """)
     return input("Choix : ")
+
+
+def next_round_view(matchs_list, round_number):
+    """ """
+    print(f"""
+        ------- Scores -------
+        
+        Résultats round {round_number}:
+        {matchs_list}
+        
+        ------- Scores -------
+        """)
+    return input("Passer au round suivant ? (y/n) : ")
 
 
 def cancel_round_view(round):

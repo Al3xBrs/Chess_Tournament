@@ -63,15 +63,15 @@ def sub_menu_tournament_controller(payload):
 
 def started_tournament_controller(payload):
     """ """
-
     tournament = payload["last_tournament"]
-    rounde = tournament.current_round
-    if tournament.status == "created":
+    if tournament.status == "created" and tournament.current_round == -1:
         tournament.start_tournament()
-        tournament.update("status", "running")
-    if tournament.current_round == -1:
+
+    elif tournament.current_round == -1 and tournament.status == "running":
         tournament.create_first_round()
-        tournament.update("current_round", 0)
+
+    rounde = tournament.current_round
+
     choice = started_tournament_view(tournament, rounde)
     if choice == "1":
         return "scores_round_controller", payload
@@ -89,28 +89,53 @@ def scores_round_controller(payload):
     """ """
 
     tournament = payload["last_tournament"]
-    rounde_id = tournament.rounds_list[tournament.current_round]
-    rounde = Round.find_one("round_id", rounde_id)
-    for match in rounde.matchs_list:
 
-        choice = scores_round_view(match)
-        if choice == "1":
-            # TODO : Return new_match_list = [("dhdhdh", 1), ("dfhdjfksh", 0)]
-            match[0][1] = 1
+    while int(tournament.current_round) < int(tournament.rounds_number):
+        rounde_id = tournament.rounds_list[tournament.current_round]
+        rounde = Round.find_one("round_id", rounde_id)
+        current_round = rounde.matchs_list
+        scores_dict = tournament.scores
+        # TODO : Mettre à jour score à chaque round
+        for match in current_round:
 
-        if choice == "2":
-            # TODO : Return new_match_list = [("dhdhdh", 0), ("dfhdjfksh", 1)]
-            match[1][1] = 1
+            choice = scores_round_view(match)
+            if choice == "1":
+                match[0][1] += 1
 
-        if choice == "3":
-            # TODO : Return new_match_list = [("dhdhdh", 0,5), ("dfhdjfksh", 0,5)]
-            match[0][1] = 0.5
-            match[1][1] = 0.5
+            if choice == "2":
+                match[1][1] += 1
 
-        if choice == "4":
-            return "started_tournament_controller", payload
-        if choice == "5":
-            return "main_menu_controller", payload
+            if choice == "3":
+                match[0][1] += 0.5
+                match[1][1] += 0.5
+
+        rounde.update("matchs_list", current_round)
+        payload["new_matchs"] = rounde.matchs_list
+        return "next_round_controller", payload
+
+    return "end_tournament_controller", payload
+
+
+def next_round_controller(payload):
+    """ """
+    matchs_list = payload["new_matchs"]
+    tournament = payload["last_tournament"]
+    round_number = tournament.current_round
+
+    choice = next_round_view(matchs_list, round_number)
+    if choice == "y":
+        round_id = tournament.rounds_list[round_number]
+        rounde = Round.find_one("round_id", round_id)
+        rounde.update("matchs_list", matchs_list)
+        tournament.next_round()
+        return "scores_round_controller", payload
+
+    elif choice == "n":
+        return "scores_round_controller", payload
+
+    else:
+        logging.warning("Wrong key ! n or y")
+        return "next_round_controller", payload
 
 
 def upadate_tournament_controller(payload):
@@ -121,10 +146,14 @@ def end_tournament_controller(payload):
     """ """
 
     tournament = payload["last_tournament"]
-    choice = end_tournament_view(tournament)
-    if choice == "4":
-        return "tournaments_menu_controller", payload
-    elif choice == "q":
+    last_round = Round.find_one("round_id", tournament.rounds_list[-1])
+    player_1 = last_round.matchs_list[0][0]
+    player_2 = last_round.matchs_list[0][1]
+    player_3 = last_round.matchs_list[1][0]
+    choice = end_tournament_view(tournament, player_1, player_2, player_3)
+
+    if choice == "q":
+        tournament.end_tournament()
         return "main_menu_controller", payload
 
 

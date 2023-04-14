@@ -93,10 +93,12 @@ def scores_round_controller(payload):
     while int(tournament.current_round) < int(tournament.rounds_number):
         rounde_id = tournament.rounds_list[tournament.current_round]
         rounde = Round.find_one("round_id", rounde_id)
-        current_round = rounde.matchs_list
         scores_dict = tournament.scores
+        scores_list = [[p1, score] for p1, score in scores_dict.items()]
+        matchs_list = [scores_list[i:i + 2] for i in range(0, len(scores_list), 2)]
+        print(matchs_list)
         # TODO : Mettre à jour score à chaque round
-        for match in current_round:
+        for match in matchs_list:
 
             choice = scores_round_view(match)
             if choice == "1":
@@ -109,8 +111,8 @@ def scores_round_controller(payload):
                 match[0][1] += 0.5
                 match[1][1] += 0.5
 
-        rounde.update("matchs_list", current_round)
-        payload["new_matchs"] = rounde.matchs_list
+        rounde.update("matchs_list", matchs_list)
+        payload["new_matchs"] = matchs_list
         return "next_round_controller", payload
 
     return "end_tournament_controller", payload

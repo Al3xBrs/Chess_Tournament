@@ -31,6 +31,10 @@ class Round:
         self.table.remove(Obj.round_id == self.round_id)
 
     @classmethod
+    def get_instance(cls, document):
+        return Round(document)
+
+    @classmethod
     def find_one(cls, data, value):
         """ """
         User = Query()

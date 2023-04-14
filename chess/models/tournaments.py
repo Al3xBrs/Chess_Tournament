@@ -132,6 +132,10 @@ class Tournament:
             self.table.update({"rounds_list": self.rounds_list}, Query().name == self.name)
             return r.round_id
 
+    @classmethod
+    def get_instance(cls, document):
+        return Tournament(document)
+
     @property
     def scores(self):
         """ """

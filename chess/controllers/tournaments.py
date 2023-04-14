@@ -2,6 +2,7 @@ from chess.views.tournaments import *
 from chess.models.tournaments import Tournament
 from chess.models.players import Player
 from chess.models.round import Round
+import json
 
 
 def tournaments_menu_controller(payload):
@@ -56,18 +57,41 @@ def searched_tournament_submenu_controller(payload):
 
     choice = searched_tournament_submenu_view(tournament_obj)
     if choice == "1":
-        tournament_data = tournament_obj.dumps()
-        with open(f"./data/Rapports/{tournament.name}.txt", "w") as f:
-            f.write(tournament_data)
+        tournament_dict = tournament_obj.copy()
+        tournament_json = json.dumps(tournament_dict)
+
+        with open(f'./data/Rapports/{tournament_obj["name"]}.txt', "w") as f:
+            f.write(tournament_json)
         logging.warning("Tournois enregistré dans 'data/Rapports'")
         return "searched_tournament_submenu_controller", payload
     elif choice == "2":
-        pass
+        tournament_obj = payload["tournament_search"]
+        rounds_list = tournament_obj["rounds_list"]
+
+        last_round = rounds_list[-1]
+
+        rounde = Round.find_one("round_id", last_round)
+        scores = rounde.matchs_list
+        payload["scores_tournament"] = scores
+
+        return "search_tournament_score_controller", payload
     elif choice == "4":
 
         return "search_submenu_tournaments_controller", payload
     elif choice == "q":
 
+        return "main_menu_controller", payload
+
+
+def search_tournament_score_controller(payload):
+    """ """
+
+    tournament = payload["tournament_search"]
+    scores = payload["scores_tournament"]
+    choice = searched_tournament_score_view(tournament, scores)
+    if choice == "4":
+        return "searched_tournament_submenu_controller", payload
+    elif choice == "q":
         return "main_menu_controller", payload
 
 

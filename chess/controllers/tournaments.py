@@ -30,8 +30,30 @@ def search_tournaments_controller(payload):
     """ """
     tournaments_list = Tournament.find_all()
     choice = search_tournaments_view(tournaments_list)
+
     if choice == "1":
         return "search_submenu_tournaments_controller", payload
+
+    elif choice == "2":
+
+        with open("./data/Rapports/tournois.txt", "w") as f:
+            for dict_obj in tournaments_list:
+                print("obj : ", dict_obj)
+                rounds_list = dict_obj["rounds_list"]
+                last_round = rounds_list[-1]
+                rounde = Round.find_one("round_id", last_round)
+                scores = rounde.matchs_list
+
+                for key, value in dict_obj.items():
+                    f.write(f"{key.upper()} : {value}")
+                    f.write("\n")
+                f.write(f"SCORES : {scores}")
+                f.write("\n")
+                f.write("_____________________________________")
+                f.write("\n")
+
+        logging.warning("Rapport généré")
+        return "search_tournaments_controller", payload
 
     elif choice == "4":
         return "tournaments_menu_controller", payload
@@ -53,25 +75,29 @@ def search_submenu_tournaments_controller(payload):
 
 def searched_tournament_submenu_controller(payload):
     """ """
-    tournament_obj = payload["tournament_search"]
 
-    choice = searched_tournament_submenu_view(tournament_obj)
+    tournament_list = payload["tournament_search"]
+    tournament_list_dict = dict(tournament_list)
+
+    rounds_list = tournament_list["rounds_list"]
+
+    last_round = rounds_list[-1]
+
+    rounde = Round.find_one("round_id", last_round)
+    scores = rounde.matchs_list
+
+    choice = searched_tournament_submenu_view(tournament_list)
     if choice == "1":
-        tournament_dict = tournament_obj.copy()
-        tournament_json = json.dumps(tournament_dict)
+        with open(f'./data/Rapports/{tournament_list["name"]}.txt', "w") as f:
+            for key, value in tournament_list_dict.items():
+                f.write(f"{key.upper()} : {value}")
+                f.write("\n")
+            f.write(f"SCORES : {scores}")
 
-        with open(f'./data/Rapports/{tournament_obj["name"]}.txt', "w") as f:
-            f.write(tournament_json)
         logging.warning("Tournois enregistré dans 'data/Rapports'")
         return "searched_tournament_submenu_controller", payload
     elif choice == "2":
-        tournament_obj = payload["tournament_search"]
-        rounds_list = tournament_obj["rounds_list"]
 
-        last_round = rounds_list[-1]
-
-        rounde = Round.find_one("round_id", last_round)
-        scores = rounde.matchs_list
         payload["scores_tournament"] = scores
 
         return "search_tournament_score_controller", payload

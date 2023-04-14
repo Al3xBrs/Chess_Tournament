@@ -9,7 +9,7 @@ def tournaments_menu_view(n_tournament_running):
     print(f"""
         ------- Menu Tournois -------
     (1) Créer un tournois
-    (2) Accéder à un tournois terminé
+    (2) Accéder à un tournois
     (3) Tournois en cours ({n_tournament_running})
     (4) Retour (Menu principal)
         ------- Menu Tournois -------
@@ -21,16 +21,17 @@ def tournaments_menu_view(n_tournament_running):
 def search_tournaments_view(tournaments_list):
     """ """
     print("""
-        ------- Accéder à un tournois terminé ------
+        ------- Accéder à un tournois ------
     """)
     pprint(tournaments_list)
     print("""
     
     (1) Rechercher par attribut / valeur
+    (2) Générer un rapport de tous les tournois
     (4) Retour
     (q) Menu principal
 
-        ------- Accéder à un tournois terminé ------
+        ------- Accéder à un tournois ------
 """)
     return input("Choix : ")
 
@@ -38,7 +39,7 @@ def search_tournaments_view(tournaments_list):
 def search_submenu_tournaments_view():
     """ """
     print("""
-        ------- Accéder à un tournois terminé ------ 
+        ------- Accéder à un tournois ------ 
     """)
     data = input("Attribut à chercher : ")
     value = input("Valeur de l'attribut : ")
@@ -48,7 +49,7 @@ def search_submenu_tournaments_view():
 def searched_tournament_submenu_view(tournament):
     """ """
     print(f"""
-        ------- Accéder à un tournois terminé ------ 
+        ------- Accéder à un tournois ------ 
     {tournament}
     
     (1) Sortir un rapport
@@ -56,7 +57,7 @@ def searched_tournament_submenu_view(tournament):
     (4) Retour
     (q) Menu principal
     
-        ------- Accéder à un tournois terminé ------ 
+        ------- Accéder à un tournois ------ 
     
     """)
     return input("Choix : ")

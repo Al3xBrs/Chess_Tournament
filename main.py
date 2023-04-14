@@ -21,6 +21,9 @@ routes = {
     "scores_round_controller": scores_round_controller,
     "end_tournament_controller": end_tournament_controller,
     "next_round_controller": next_round_controller,
+    "search_tournaments_controller": search_tournaments_controller,
+    "search_submenu_tournaments_controller": search_submenu_tournaments_controller,
+    "searched_tournament_submenu_controller": searched_tournament_submenu_controller,
 
 }
 

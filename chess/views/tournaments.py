@@ -1,4 +1,5 @@
 import logging
+from pprint import pprint
 
 
 def tournaments_menu_view(n_tournament_running):
@@ -19,9 +20,11 @@ def tournaments_menu_view(n_tournament_running):
 
 def search_tournaments_view(tournaments_list):
     """ """
-    print(f"""
+    print("""
         ------- Accéder à un tournois terminé ------
-    {tournaments_list}
+    """)
+    pprint(tournaments_list)
+    print("""
     
     (1) Rechercher par attribut / valeur
     (4) Retour
@@ -54,6 +57,22 @@ def searched_tournament_submenu_view(tournament):
     (q) Menu principal
     
         ------- Accéder à un tournois terminé ------ 
+    
+    """)
+    return input("Choix : ")
+
+
+def searched_tournament_score_view(tournament, scores):
+    """ """
+    print(f"""
+        ------- Accéder à un tournois ------
+    {tournament}
+    {scores}
+    
+    (4) Retour
+    (q) Menu principal
+    
+        ------- Accéder à un tournois ------
     
     """)
     return input("Choix : ")

@@ -13,7 +13,7 @@ def tournaments_menu_controller(payload):
     if choice == "1":
         return "create_tournament_controller", payload
     elif choice == "2":
-        return "find_tournament_controller", payload
+        return "search_tournaments_controller", payload
     elif choice == "3" and n_tournament_running == 1:
         # TODO: tournament running
         tournament_running = Tournament.find_one("status", "running")
@@ -22,6 +22,52 @@ def tournaments_menu_controller(payload):
     elif choice == "3" and n_tournament_running > 1:
         return "select_tournament_controller", payload
     elif choice == "4":
+        return "main_menu_controller", payload
+
+
+def search_tournaments_controller(payload):
+    """ """
+    tournaments_list = Tournament.find_all()
+    choice = search_tournaments_view(tournaments_list)
+    if choice == "1":
+        return "search_submenu_tournaments_controller", payload
+
+    elif choice == "4":
+        return "tournaments_menu_controller", payload
+
+    elif choice == "q":
+        return "main_menu_controller", payload
+
+
+def search_submenu_tournaments_controller(payload):
+    """"""
+    choice = search_submenu_tournaments_view()
+    data = choice[0]
+    value = choice[1]
+    tournament = Tournament.find_one(data, value)
+    payload["tournament_search"] = tournament
+
+    return "searched_tournament_submenu_controller", payload
+
+
+def searched_tournament_submenu_controller(payload):
+    """ """
+    tournament_obj = payload["tournament_search"]
+
+    choice = searched_tournament_submenu_view(tournament_obj)
+    if choice == "1":
+        tournament_data = tournament_obj.dumps()
+        with open(f"./data/Rapports/{tournament.name}.txt", "w") as f:
+            f.write(tournament_data)
+        logging.warning("Tournois enregistré dans 'data/Rapports'")
+        return "searched_tournament_submenu_controller", payload
+    elif choice == "2":
+        pass
+    elif choice == "4":
+
+        return "search_submenu_tournaments_controller", payload
+    elif choice == "q":
+
         return "main_menu_controller", payload
 
 

@@ -2,6 +2,7 @@ import logging
 from pprint import pprint
 
 
+# TODO : Maj des views plus jolis
 def tournaments_menu_view(n_tournament_running):
     """
     Affiche le menu des tournois

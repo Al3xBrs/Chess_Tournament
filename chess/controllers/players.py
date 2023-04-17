@@ -1,6 +1,8 @@
 from chess.models.players import Player
-from chess.views.players import players_menu_view, players_list_menu_view, player_create_menu_view, player_submenu_view, \
-    players_list_view, player_delete_view, player_update_view, search_player_view
+from chess.views.players import players_menu_view, players_list_menu_view, \
+    player_create_menu_view, player_submenu_view, \
+    players_list_view, player_delete_view, player_update_view, \
+    search_player_view
 import logging
 
 
@@ -50,6 +52,16 @@ def players_list_controller(payload):
         return "main_menu_controller", payload
     elif choice == "3":
         return "search_player_controller", payload
+    elif choice == "2":
+        logging.warning("Rapport généré")
+        with open("./data/Rapports/joueurs/joueurs.txt", "w") as f:
+            f.write("Liste de joueurs :\n")
+            for player in players_list:
+                for key, value in player.items():
+                    f.write(f"{key.upper()} : {value}")
+                    f.write("\n")
+                f.write("\n")
+        return "players_list_controller", payload
 
 
 def search_player_controller(payload):
@@ -70,6 +82,14 @@ def player_submenu_controller(payload):
         return "player_update_controller", payload
     elif choice == "2":
         return "player_remove_menu_controller", payload
+    elif choice == "3":
+        with open(f"./data/Rapports/joueurs/{player_ine}.txt", "w") as f:
+            f.write("Données joueur :\n")
+            for key, value in player_dict.items():
+                f.write(f"{key.upper()} : {value}")
+                f.write("\n")
+        logging.warning("Rapport généré")
+        return "player_submenu_controller", payload
     elif choice == "4":
         return "players_list_menu_controller", payload
     elif choice == "q":

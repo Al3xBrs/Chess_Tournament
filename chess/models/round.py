@@ -8,7 +8,8 @@ class Round:
     """ """
     table = DATA_ROUNDS
 
-    def __init__(self, matchs_list=[], date_hour_start="", date_hour_end="", round_id=None):
+    def __init__(self, matchs_list=[], date_hour_start="", date_hour_end="",
+                 round_id=None):
         """ """
         self.round_id = round_id or str(uuid.uuid4())
         self.matchs_list = matchs_list
@@ -18,7 +19,8 @@ class Round:
     def create(self):
         """ """
         self.table.insert(self.__dict__)
-        self.table.update({"date_hour_start": str(datetime.now())}, Query().round_id == self.round_id)
+        self.table.update({"date_hour_start": str(datetime.now())},
+                          Query().round_id == self.round_id)
 
     @classmethod
     def remove_all(cls):
@@ -52,7 +54,8 @@ class Round:
 
     def end(self):
         """ """
-        self.table.update({"date_hour_end": str(datetime.now())}, Query().round_id == self.round_id)
+        self.table.update({"date_hour_end": str(datetime.now())},
+                          Query().round_id == self.round_id)
 
     @classmethod
     def get_previous_matchs(cls):

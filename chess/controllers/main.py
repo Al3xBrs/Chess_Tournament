@@ -1,6 +1,4 @@
-from chess.controllers.players import *
-
-from chess.views.main import *
+from chess.views.main import main_menu_view
 
 
 def main_menu_controller(payload):

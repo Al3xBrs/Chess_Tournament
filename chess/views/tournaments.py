@@ -18,6 +18,15 @@ def tournaments_menu_view(n_tournament_running):
     return input("Choix : ")
 
 
+def select_tournament_view(tournaments_list):
+    """ """
+    print(f"""
+        -------- Selection du tournois en cours ---------
+    {tournaments_list}
+    """)
+    return input("Nom du tournois à continuer : ")
+
+
 def search_tournaments_view(tournaments_list):
     """ """
     print("""
@@ -25,7 +34,7 @@ def search_tournaments_view(tournaments_list):
     """)
     pprint(tournaments_list)
     print("""
-    
+
     (1) Rechercher par attribut / valeur
     (2) Générer un rapport de tous les tournois
     (4) Retour
@@ -39,7 +48,7 @@ def search_tournaments_view(tournaments_list):
 def search_submenu_tournaments_view():
     """ """
     print("""
-        ------- Accéder à un tournois ------ 
+        ------- Accéder à un tournois ------
     """)
     data = input("Attribut à chercher : ")
     value = input("Valeur de l'attribut : ")
@@ -49,16 +58,15 @@ def search_submenu_tournaments_view():
 def searched_tournament_submenu_view(tournament):
     """ """
     print(f"""
-        ------- Accéder à un tournois ------ 
+        ------- Accéder à un tournois ------
     {tournament}
-    
-    (1) Sortir un rapport
+
+    (1) Editer un rapport
     (2) Voir les scores
     (4) Retour
     (q) Menu principal
-    
-        ------- Accéder à un tournois ------ 
-    
+
+        ------- Accéder à un tournois ------
     """)
     return input("Choix : ")
 
@@ -69,12 +77,11 @@ def searched_tournament_score_view(tournament, scores):
         ------- Accéder à un tournois ------
     {tournament}
     {scores}
-    
+
     (4) Retour
     (q) Menu principal
-    
+
         ------- Accéder à un tournois ------
-    
     """)
     return input("Choix : ")
 
@@ -92,7 +99,8 @@ def tournaments_create_view():
     end_date = input("Entrer la date de fin du tournois : ")
     desc_choice = input("Souhaitez-vous ajouter une description ? (y/n)")
     desc = ""
-    rounds_number_choice = input("Souhaitez-vous définir un nombre de tour ? (y/n) Par défaut : 4")
+    rounds_number_choice = input("""
+    Souhaitez-vous définir un nombre de tour ? (y/n) Par défaut : 4""")
     rounds_number = "4"
     if desc_choice == "y":
         desc = input("Entrer une description : ")
@@ -113,7 +121,7 @@ def sub_menu_tournament_view(tournament):
     (2) Modifier le tournois / les joueurs
     (3) Mettre fin au tournois
     (4) Retour
-    (q) Menu principal 
+    (q) Menu principal
         ------- Création Tournois --------
     """)
     return input("Choix : ")
@@ -130,7 +138,7 @@ def started_tournament_view(tournament, rounde):
     (2) Annuler le round
     (3) Terminer le tournois
     (4) Retour
-    (q) Menu principal 
+    (q) Menu principal
         ------- Tournois en cours -------
     """)
     return input("Choix : ")
@@ -143,7 +151,7 @@ def end_tournament_view(tournament, player_1, player_2, player_3):
         ------- Fin du tournois -------
     {tournament}
     Tournois terminé !
-    
+
     Voici le podium :
     {player_1}
     {player_2}
@@ -159,10 +167,11 @@ def update_tournament_view(tournament):
     """"""
 
     print(f"""
-    -------- Modification du tournois -------
+        -------- Modification du tournois -------
         {tournament}
-    
-    \x1B[3m(Taper en premier la donnée à mettre à jour, puis la nouvelle valeur de cette donnée.)\x1B[0m
+
+    (Taper en premier la donnée à mettre à jour, puis la nouvelle
+    valeur de cette donnée.)
     (4) Retour
         ------- Modification du tournois -------
     """)
@@ -178,7 +187,7 @@ def scores_round_view(match):
         ------- Scores -------
         {match}
         (1) Joueur 1 à gagné
-        (2) Joueur 2 à gagné 
+        (2) Joueur 2 à gagné
         (3) Match nul
         ------- Scores -------
         """)
@@ -189,10 +198,10 @@ def next_round_view(matchs_list, round_number):
     """ """
     print(f"""
         ------- Scores -------
-        
+
         Résultats round {round_number}:
         {matchs_list}
-        
+
         ------- Scores -------
         """)
     return input("Passer au round suivant ? (y/n) : ")

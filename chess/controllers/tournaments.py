@@ -1,14 +1,27 @@
-from chess.views.tournaments import *
+from chess.views.tournaments import tournaments_menu_view, \
+    search_tournaments_view, search_submenu_tournaments_view, \
+    searched_tournament_submenu_view, searched_tournament_score_view, \
+    tournaments_create_view, sub_menu_tournament_view, \
+    started_tournament_view, select_tournament_view, \
+    scores_round_view, next_round_view, end_tournament_view, cancel_round_view
 from chess.models.tournaments import Tournament
 from chess.models.players import Player
 from chess.models.round import Round
-import json
+import logging
 
 
 def tournaments_menu_controller(payload):
     """ """
 
-    tournament_running_list = Tournament.find_all()
+    tournaments_list = Tournament.find_all()
+    print(tournaments_list)
+    tournament_running_list = []
+    for tournament in tournaments_list:
+        print(tournament)
+        for key, value in tournament.items():
+            if key == "status" and value == "running":
+                tournament_running_list.append(tournament)
+
     n_tournament_running = len(tournament_running_list)
     choice = tournaments_menu_view(n_tournament_running)
     if choice == "1":
@@ -16,14 +29,38 @@ def tournaments_menu_controller(payload):
     elif choice == "2":
         return "search_tournaments_controller", payload
     elif choice == "3" and n_tournament_running == 1:
-        # TODO: tournament running
-        tournament_running = Tournament.find_one("status", "running")
 
+        tournament = Tournament.get_instance(tournament_running_list[0])
+        round_id = tournament.rounds_list[-1]
+        round_find = Round.find_one("round_id", round_id)
+        rounde = Round.get_instance(round_find)
+        payload["last_tournament"] = tournament
+        payload["last_round"] = rounde
         return "started_tournament_controller", payload
+
     elif choice == "3" and n_tournament_running > 1:
+        payload["running_tournaments"] = tournament_running_list
         return "select_tournament_controller", payload
+    elif choice == "3" and n_tournament_running == 0:
+        logging.warning("Aucun tournois en cours")
+        return "tournaments_menu_controller", payload
     elif choice == "4":
         return "main_menu_controller", payload
+
+
+def select_tournament_controller(payload):
+    """ """
+    tournaments_list = payload["running_tournaments"]
+    choice = select_tournament_view(tournaments_list)
+    tournament_choice = Tournament.find_one("name", choice)
+    tournament = Tournament.get_instance(tournament_choice)
+    round_id = tournament.rounds_list[-1]
+    round_find = Round.find_one("round_id", round_id)
+    rounde = Round.get_instance(round_find)
+    payload["last_tournament"] = tournament
+    payload["last_round"] = rounde
+
+    return "started_tournament_controller", payload
 
 
 def search_tournaments_controller(payload):
@@ -36,7 +73,7 @@ def search_tournaments_controller(payload):
 
     elif choice == "2":
 
-        with open("./data/Rapports/tournois.txt", "w") as f:
+        with open("./data/Rapports/tournois/tournois.txt", "w") as f:
             for dict_obj in tournaments_list:
                 print("obj : ", dict_obj)
                 rounds_list = dict_obj["rounds_list"]
@@ -76,19 +113,32 @@ def search_submenu_tournaments_controller(payload):
 def searched_tournament_submenu_controller(payload):
     """ """
 
-    tournament_list = payload["tournament_search"]
-    tournament_list_dict = dict(tournament_list)
+    tournament = payload["tournament_search"]
+    print("tournament :", tournament)
+    tournament_list_dict = dict(tournament)
 
-    rounds_list = tournament_list["rounds_list"]
+    rounds_list = tournament["rounds_list"]
+    print("rounds list :", rounds_list)
+    last_round = []
+    if len(rounds_list) > 0:
+        last_round = rounds_list[-1]
+        print("ue", last_round)
+    elif len(rounds_list) == 0:
+        print("tournois : ", tournament)
 
-    last_round = rounds_list[-1]
+        tournament = Tournament.get_instance(tournament)
+        tournament.start_tournament()
+        tournament.create_first_round()
+        last_round = tournament.rounds_list
+        print("last round :", last_round)
 
     rounde = Round.find_one("round_id", last_round)
     scores = rounde.matchs_list
 
-    choice = searched_tournament_submenu_view(tournament_list)
+    choice = searched_tournament_submenu_view(tournament)
     if choice == "1":
-        with open(f'./data/Rapports/{tournament_list["name"]}.txt', "w") as f:
+        with open(f'./data/Rapports/tournois/{tournament["name"]}.txt',
+                  "w") as f:
             for key, value in tournament_list_dict.items():
                 f.write(f"{key.upper()} : {value}")
                 f.write("\n")
@@ -132,7 +182,9 @@ def create_tournament_controller(payload):
     desc = data_tournament[4]
     rounds_number = data_tournament[5]
     list_players = [player.ine for player in Player.find_all()]
-    tournament = Tournament(name, place, start_date, end_date, players_list=list_players, rounds_number=rounds_number,
+    tournament = Tournament(name, place, start_date, end_date,
+                            players_list=list_players,
+                            rounds_number=rounds_number,
                             description=desc)
     tournament.create()
     payload[f"tournament_{name}"] = tournament
@@ -191,7 +243,8 @@ def scores_round_controller(payload):
         rounde = Round.find_one("round_id", rounde_id)
         scores_dict = tournament.scores
         scores_list = [[p1, score] for p1, score in scores_dict.items()]
-        matchs_list = [scores_list[i:i + 2] for i in range(0, len(scores_list), 2)]
+        matchs_list = [scores_list[i:i + 2] for i in
+                       range(0, len(scores_list), 2)]
         print(matchs_list)
         # TODO : Mettre à jour score à chaque round
         for match in matchs_list:

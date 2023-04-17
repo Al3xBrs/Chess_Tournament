@@ -5,7 +5,8 @@ def players_menu_view() -> str:
     """Menu joueur
 
     Returns:
-        int: 1 = Affiche menu liste joueur, 2 = Affiche menu création joueur, 4 = View précédente
+        int: 1 = Affiche menu liste joueur, 2 = Affiche menu création joueur,
+         4 = View précédente
     """
     print("""
         ------- Menu joueur -------
@@ -21,7 +22,8 @@ def players_menu_view() -> str:
 def players_list_menu_view() -> str:
     """Menu liste joueurs
 
-    Returns: int: 1 = List sorted Alphabétique, 2 = List sorted INE, 3 = List sorted nombre de point actuel,
+    Returns: int: 1 = List sorted Alphabétique, 2 = List sorted INE, 3 = List
+    sorted nombre de point actuel,
     4 = View précédente
     """
     print("""
@@ -36,13 +38,7 @@ def players_list_menu_view() -> str:
 
 
 def players_list_view(players_list: list[dict]):
-    """Affiche la liste des joueurs
-
-    Args:
-        players_list: liste des joueurs
-
-    Returns:
-        Any: 4 = View précédente, sinon = donnée et valeur du joueur à retrouver
+    """
     """
 
     print("""
@@ -50,6 +46,7 @@ def players_list_view(players_list: list[dict]):
         """)
     pprint(players_list)
     print("""
+    (2) Editer un rapport
     (3) Chercher un joueur
     (4) Retour
     (q) Menu principal
@@ -89,20 +86,14 @@ def player_create_menu_view():
 
 
 def player_submenu_view(player: dict) -> str:
-    """Menu joueur
-
-    Args:
-        player_dict (dict): Donnée du joueur
-
-
-    Returns:
-        Int: 1 = view update player, 2 = view delete player, 4 = View précédente
+    """
     """
     print(f"""
         ------- Menu joueur -------
     {player}
     (1) Mettre à jour le profil
     (2) Supprimer le joueur
+    (3) Générer un rapport
     (4) Retour
     (q) Menu principal
         ------- Menu joueur -------
@@ -112,20 +103,14 @@ def player_submenu_view(player: dict) -> str:
 
 
 def player_update_view(player: dict) -> list:
-    """Menu update joueur
-
-    Args:
-        player_dict (dict): Donnée du joueur
-
-
-    Returns:
-        any: View précédente si 4, maj du joueur si données.
+    """
     """
     print(f"""
         ------- Menu joueur -------
     {player}
-    
-    \x1B[3m(Taper en premier la donnée à mettre à jour, puis la nouvelle valeur de cette donnée.)\x1B[0m
+
+    (Taper en premier la donnée à mettre à jour, puis la nouvelle
+    valeur de cette donnée.)
     (4) Retour
         ------- Menu joueur -------
     """)
@@ -135,15 +120,9 @@ def player_update_view(player: dict) -> list:
 
 
 def player_delete_view() -> str:
-    """Suppression du joueur
-
-
-
-
-    Returns:
-        bool: True if "y", False if "n"
     """
-    print(f"""
+    """
+    print("""
         ------- Menu joueur -------
     (4) Retour
         ------- Menu joueur -------

@@ -1,8 +1,9 @@
-import logging, random
+import logging
+import random
 
 from chess.models.conf import DATA_TOURNAMENTS
 from tinydb import Query
-from chess.models.players import Player
+
 from chess.models.round import Round
 
 
@@ -15,7 +16,7 @@ class Tournament:
     def __init__(
             self,
 
-            name,
+            name="",
             place="",
             start_date="",
             end_date="",
@@ -61,7 +62,8 @@ class Tournament:
     def update(self, tournament_value, value_to_change):
         """ """
         Obj = Query()
-        self.table.update({tournament_value: value_to_change}, Obj.name == self.name)
+        self.table.update({tournament_value: value_to_change},
+                          Obj.name == self.name)
 
     @classmethod
     def find_one(cls, data, value):
@@ -87,7 +89,8 @@ class Tournament:
 
             if ine_player not in self.players_list:
                 self.players_list.append(ine_player)
-                self.table.update({'players_list': self.players_list}, Query().name == self.name)
+                self.table.update({'players_list': self.players_list},
+                                  Query().name == self.name)
                 logging.warning("Joueur inscrit")
 
             else:
@@ -108,7 +111,8 @@ class Tournament:
         """ """
         if (self.status == "created") and (self.n_players == self.MAX_PLAYERS):
             self.status = "running"
-            self.table.update({"status": self.status}, Query().name == self.name)
+            self.table.update({"status": self.status},
+                              Query().name == self.name)
 
         elif self.status != "created":
             logging.error(f"Erreur de status {self.status}")
@@ -119,7 +123,8 @@ class Tournament:
         """ """
         if self.current_round == -1 and self.status == "running":
             self.current_round += 1
-            self.table.update({"current_round": self.current_round}, Query().name == self.name)
+            self.table.update({"current_round": self.current_round},
+                              Query().name == self.name)
 
             shuffled_list = self.players_list
             random.shuffle(shuffled_list)
@@ -129,12 +134,25 @@ class Tournament:
             r = Round(matchs_list)
             r.create()
             self.rounds_list.append(r.round_id)
-            self.table.update({"rounds_list": self.rounds_list}, Query().name == self.name)
+            self.table.update({"rounds_list": self.rounds_list},
+                              Query().name == self.name)
             return r.round_id
 
     @classmethod
     def get_instance(cls, document):
-        return Tournament(document)
+        name = document["name"]
+        place = document["place"]
+        start_date = document["start_date"]
+        end_date = document["end_date"]
+        rounds_number = document["rounds_number"]
+        current_round = document["current_round"]
+        rounds_list = document["rounds_list"]
+        players_list = document["players_list"]
+        description = document["description"]
+        status = document["status"]
+        return Tournament(name, place, start_date, end_date, rounds_number,
+                          current_round, rounds_list, players_list,
+                          description, status)
 
     @property
     def scores(self):
@@ -167,7 +185,8 @@ class Tournament:
 
         classement = [i[0] for i in classement]
         self.players_list = classement
-        self.table.update({"players_list": self.players_list}, Query().name == self.name)
+        self.table.update({"players_list": self.players_list},
+                          Query().name == self.name)
 
         return classement
 
@@ -268,15 +287,19 @@ class Tournament:
 
     def next_round(self):
         """ """
-        previous_round = Round.find_one("round_id", f"{self.rounds_list[self.current_round]}")
+        i = self.rounds_list[self.current_round]
+        previous_round = Round.find_one("round_id",
+                                        f"{i}")
         previous_round.end()
 
         self.current_round += 1
-        self.table.update({"current_round": self.current_round}, Query().name == self.name)
+        self.table.update({"current_round": self.current_round},
+                          Query().name == self.name)
 
         if int(self.current_round) >= int(self.rounds_number):
             self.status = "closed"
-            self.table.update({"status": self.status}, Query().name == self.name)
+            self.table.update({"status": self.status},
+                              Query().name == self.name)
 
             return logging.warning("Tournois terminé !")
         new_match_list = self.compute_round()
@@ -284,7 +307,8 @@ class Tournament:
         new_round = Round(new_match_list)
 
         self.rounds_list.append(new_round.round_id)
-        self.table.update({"rounds_list": self.rounds_list}, Query().name == self.name)
+        self.table.update({"rounds_list": self.rounds_list},
+                          Query().name == self.name)
         new_round.create()
 
     @property
@@ -294,5 +318,6 @@ class Tournament:
 
     def __repr__(self):
         """ """
-        rep = 'Tournois(' + self.name + ',' + self.place + str(self.players_list) + ')'
+        rep = 'Tournois(' + self.name + ',' + self.place + str(
+            self.players_list) + ')'
         return rep

@@ -245,7 +245,7 @@ def scores_round_controller(payload):
         matchs_list = [scores_list[i:i + 2] for i in
                        range(0, len(scores_list), 2)]
         print(matchs_list)
-        # TODO : Mettre à jour score à chaque round
+        # TODO : Match affiché en "id, nom, prénom"
         for match in matchs_list:
 
             choice = scores_round_view(match)

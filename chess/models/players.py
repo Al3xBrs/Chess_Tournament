@@ -15,7 +15,8 @@ class Player:
             prenom: str,
             date_naissance: str,
             ine: str,
-            score: int = 0,  # à confirmer
+            score: int = 0,
+
     ) -> None:
         """Initialisation du joueur.
 

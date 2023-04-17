@@ -9,7 +9,7 @@ def main_menu_view() -> str:
     (1) Menu joueur
     (2) Menu tournois
     (q) Quit
-    ------- Menu principal -------        
+    ------- Menu principal -------
     """
     )
 

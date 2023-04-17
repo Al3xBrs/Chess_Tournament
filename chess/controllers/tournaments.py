@@ -244,8 +244,7 @@ def scores_round_controller(payload):
         scores_list = [[p1, score] for p1, score in scores_dict.items()]
         matchs_list = [scores_list[i:i + 2] for i in
                        range(0, len(scores_list), 2)]
-        print(matchs_list)
-        # TODO : Mettre à jour score à chaque round
+
         for match in matchs_list:
 
             choice = scores_round_view(match)

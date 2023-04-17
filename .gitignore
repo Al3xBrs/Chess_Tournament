@@ -2,10 +2,15 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+.DS_Store
+*.DS_Store
+.idea/
+idea/
+*.txt
+*.pdf
 # C extensions
 *.so
-
+*.json
 # Distribution / packaging
 .Python
 build/

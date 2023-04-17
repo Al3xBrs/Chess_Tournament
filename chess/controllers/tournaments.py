@@ -114,17 +114,16 @@ def searched_tournament_submenu_controller(payload):
     """ """
 
     tournament = payload["tournament_search"]
-    print("tournament :", tournament)
+
     tournament_list_dict = dict(tournament)
 
     rounds_list = tournament["rounds_list"]
-    print("rounds list :", rounds_list)
+
     last_round = []
     if len(rounds_list) > 0:
         last_round = rounds_list[-1]
         print("ue", last_round)
     elif len(rounds_list) == 0:
-        print("tournois : ", tournament)
 
         tournament = Tournament.get_instance(tournament)
         tournament.start_tournament()

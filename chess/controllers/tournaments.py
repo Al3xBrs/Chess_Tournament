@@ -14,10 +14,10 @@ def tournaments_menu_controller(payload):
     """ """
 
     tournaments_list = Tournament.find_all()
-    print(tournaments_list)
+
     tournament_running_list = []
     for tournament in tournaments_list:
-        print(tournament)
+
         for key, value in tournament.items():
             if key == "status" and value == "running":
                 tournament_running_list.append(tournament)
@@ -75,7 +75,7 @@ def search_tournaments_controller(payload):
 
         with open("./data/Rapports/tournois/tournois.txt", "w") as f:
             for dict_obj in tournaments_list:
-                print("obj : ", dict_obj)
+
                 rounds_list = dict_obj["rounds_list"]
                 last_round = rounds_list[-1]
                 rounde = Round.find_one("round_id", last_round)
@@ -122,14 +122,13 @@ def searched_tournament_submenu_controller(payload):
     last_round = []
     if len(rounds_list) > 0:
         last_round = rounds_list[-1]
-        print("ue", last_round)
+
     elif len(rounds_list) == 0:
 
         tournament = Tournament.get_instance(tournament)
         tournament.start_tournament()
         tournament.create_first_round()
         last_round = tournament.rounds_list
-        print("last round :", last_round)
 
     rounde = Round.find_one("round_id", last_round)
     scores = rounde.matchs_list
@@ -244,8 +243,7 @@ def scores_round_controller(payload):
         scores_list = [[p1, score] for p1, score in scores_dict.items()]
         matchs_list = [scores_list[i:i + 2] for i in
                        range(0, len(scores_list), 2)]
-        print(matchs_list)
-        # TODO : Match affiché en "id, nom, prénom"
+
         for match in matchs_list:
 
             choice = scores_round_view(match)

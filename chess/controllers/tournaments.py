@@ -2,7 +2,7 @@ from chess.views.tournaments import tournaments_menu_view, \
     search_tournaments_view, search_submenu_tournaments_view, \
     searched_tournament_submenu_view, searched_tournament_score_view, \
     tournaments_create_view, sub_menu_tournament_view, \
-    started_tournament_view, select_tournament_view, \
+    started_tournament_view, select_tournament_view, not_continue_round_view, \
     scores_round_view, next_round_view, end_tournament_view, cancel_round_view
 from chess.models.tournaments import Tournament
 from chess.models.players import Player
@@ -10,14 +10,14 @@ from chess.models.round import Round
 import logging
 
 
-def tournaments_menu_controller(payload):
+def tournaments_menu_controller(payload: dict) -> tuple[str, dict]:
     """ """
 
     tournaments_list = Tournament.find_all()
-    print(tournaments_list)
+
     tournament_running_list = []
     for tournament in tournaments_list:
-        print(tournament)
+
         for key, value in tournament.items():
             if key == "status" and value == "running":
                 tournament_running_list.append(tournament)
@@ -48,7 +48,7 @@ def tournaments_menu_controller(payload):
         return "main_menu_controller", payload
 
 
-def select_tournament_controller(payload):
+def select_tournament_controller(payload: dict) -> tuple[str, dict]:
     """ """
     tournaments_list = payload["running_tournaments"]
     choice = select_tournament_view(tournaments_list)
@@ -63,7 +63,7 @@ def select_tournament_controller(payload):
     return "started_tournament_controller", payload
 
 
-def search_tournaments_controller(payload):
+def search_tournaments_controller(payload: dict) -> tuple[str, dict]:
     """ """
     tournaments_list = Tournament.find_all()
     choice = search_tournaments_view(tournaments_list)
@@ -75,7 +75,7 @@ def search_tournaments_controller(payload):
 
         with open("./data/Rapports/tournois/tournois.txt", "w") as f:
             for dict_obj in tournaments_list:
-                print("obj : ", dict_obj)
+
                 rounds_list = dict_obj["rounds_list"]
                 last_round = rounds_list[-1]
                 rounde = Round.find_one("round_id", last_round)
@@ -110,7 +110,7 @@ def search_submenu_tournaments_controller(payload):
     return "searched_tournament_submenu_controller", payload
 
 
-def searched_tournament_submenu_controller(payload):
+def searched_tournament_submenu_controller(payload: dict) -> tuple[str, dict]:
     """ """
 
     tournament = payload["tournament_search"]
@@ -122,14 +122,13 @@ def searched_tournament_submenu_controller(payload):
     last_round = []
     if len(rounds_list) > 0:
         last_round = rounds_list[-1]
-        print("ue", last_round)
+
     elif len(rounds_list) == 0:
 
         tournament = Tournament.get_instance(tournament)
         tournament.start_tournament()
         tournament.create_first_round()
         last_round = tournament.rounds_list
-        print("last round :", last_round)
 
     rounde = Round.find_one("round_id", last_round)
     scores = rounde.matchs_list
@@ -158,7 +157,7 @@ def searched_tournament_submenu_controller(payload):
         return "main_menu_controller", payload
 
 
-def search_tournament_score_controller(payload):
+def search_tournament_score_controller(payload: dict) -> tuple[str, dict]:
     """ """
 
     tournament = payload["tournament_search"]
@@ -192,7 +191,7 @@ def create_tournament_controller(payload):
     return "sub_menu_tournament_controller", payload
 
 
-def sub_menu_tournament_controller(payload):
+def sub_menu_tournament_controller(payload: dict) -> tuple[str, dict]:
     tournament = payload["last_tournament"]
     choice = sub_menu_tournament_view(tournament)
     if choice == "1":
@@ -208,7 +207,7 @@ def sub_menu_tournament_controller(payload):
         return "main_menu_controller", payload
 
 
-def started_tournament_controller(payload):
+def started_tournament_controller(payload: dict) -> tuple[str, dict]:
     """ """
     tournament = payload["last_tournament"]
     if tournament.status == "created" and tournament.current_round == -1:
@@ -232,7 +231,7 @@ def started_tournament_controller(payload):
         return "main_menu_controller", payload
 
 
-def scores_round_controller(payload):
+def scores_round_controller(payload: dict) -> tuple[str, dict]:
     """ """
 
     tournament = payload["last_tournament"]
@@ -244,8 +243,7 @@ def scores_round_controller(payload):
         scores_list = [[p1, score] for p1, score in scores_dict.items()]
         matchs_list = [scores_list[i:i + 2] for i in
                        range(0, len(scores_list), 2)]
-        print(matchs_list)
-        # TODO : Mettre à jour score à chaque round
+
         for match in matchs_list:
 
             choice = scores_round_view(match)
@@ -266,7 +264,7 @@ def scores_round_controller(payload):
     return "end_tournament_controller", payload
 
 
-def next_round_controller(payload):
+def next_round_controller(payload: dict) -> tuple[str, dict]:
     """ """
     matchs_list = payload["new_matchs"]
     tournament = payload["last_tournament"]
@@ -281,18 +279,28 @@ def next_round_controller(payload):
         return "scores_round_controller", payload
 
     elif choice == "n":
-        return "scores_round_controller", payload
+        return "not_continue_round_controller", payload
 
     else:
         logging.warning("Wrong key ! n or y")
         return "next_round_controller", payload
 
 
-def upadate_tournament_controller(payload):
-    pass
+def not_continue_round_controller(payload: dict) -> tuple[str, dict]:
+    """ """
+
+    choice = not_continue_round_view()
+    if choice == "1":
+        return "main_menu_controller", payload
+    elif choice == "2":
+        return "players_menu_controller", payload
+    elif choice == "3":
+        return "tournaments_menu_controller", payload
+    elif choice == "4":
+        return "next_round_controller", payload
 
 
-def end_tournament_controller(payload):
+def end_tournament_controller(payload: dict) -> tuple[str, dict]:
     """ """
 
     tournament = payload["last_tournament"]
@@ -307,7 +315,7 @@ def end_tournament_controller(payload):
         return "main_menu_controller", payload
 
 
-def cancel_round_controller(payload):
+def cancel_round_controller(payload: dict) -> tuple[str, dict]:
     """ """
 
     tournament = payload["last_tournament"]
@@ -320,7 +328,3 @@ def cancel_round_controller(payload):
         return "started_tournament_controller", payload
     elif choice == "n":
         return "started_tournament_controller", payload
-
-
-def cancel_tournament_controller(payload):
-    pass

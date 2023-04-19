@@ -319,5 +319,5 @@ class Tournament:
     def __repr__(self):
         """ """
         rep = 'Tournois(' + self.name + ',' + self.place + str(
-git            self.players_list) + ')'
+            self.players_list) + ')'
         return rep

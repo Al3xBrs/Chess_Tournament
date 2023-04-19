@@ -1,5 +1,4 @@
 import logging
-from pprint import pprint
 
 
 def tournaments_menu_view(n_tournament_running):
@@ -94,9 +93,9 @@ def searched_tournament_submenu_view(tournament, padding=15, sep="|"):
         f'{char_replace(str(tournament["players_list"]).ljust(60))}'
     )
 
-    print(f"""
+    print("""
         ------- Accéder à un tournois ------
-        
+
     (1) Editer un rapport
     (2) Voir les scores
     (4) Retour
@@ -122,9 +121,9 @@ def searched_tournament_score_view(tournament, scores, padding=15, sep="|"):
         f'{tournament["status"].ljust(padding)} {sep}'
         f'{char_replace(str(scores).ljust(80))}'
     )
-    print(f"""
+    print("""
         ------- Accéder à un tournois ------
-        
+
     (4) Retour
     (q) Menu principal
 
@@ -174,7 +173,7 @@ def sub_menu_tournament_view(tournament, padding=15, sep="|"):
         f'{char_replace(str(tournament.players_list).ljust(80))}'
     )
 
-    print(f"""
+    print("""
         ------- Création Tournois -------
     (1) Commencer le tournois
     (3) Mettre fin au tournois
@@ -265,7 +264,7 @@ def update_tournament_view(tournament, padding=15, sep="|"):
         f'{tournament.status.ljust(padding)} {sep} '
         f'{char_replace(str(tournament.players_list).ljust(80))}'
     )
-    print(f"""
+    print("""
         -------- Modification du tournois -------
     (Taper en premier la donnée à mettre à jour, puis la nouvelle
     valeur de cette donnée.)
@@ -289,7 +288,7 @@ def scores_round_view(match, padding=15, sep="|"):
         f"{char_replace(str(match[0][1])).ljust(padding)} {sep} "
         f"{char_replace(match[1][0]).ljust(padding)} {sep}"
         f"{char_replace(str(match[1][1])).ljust(padding)}")
-    print(f"""
+    print("""
         ------- Scores -------
         (1) Joueur 1 à gagné
         (2) Joueur 2 à gagné
@@ -362,7 +361,7 @@ def cancel_tournament_view(tournament, padding=15, sep="|"):
         f'{tournament.status.ljust(padding)} {sep} '
         f'{char_replace(str(tournament.players_list).ljust(80))}'
     )
-    print(f"""
+    print("""
         ------- Annulation du tournois -------
     (4) Retour
     (q) Menu principal

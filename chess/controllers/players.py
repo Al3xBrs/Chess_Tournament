@@ -128,7 +128,7 @@ def player_create_menu_controller(payload: dict) -> tuple[str, dict]:
     création du joueur
     """
 
-    choice = player_create_menu_view()  # renvoi [nom,prenom,date_naissance,ine]
+    choice = player_create_menu_view()  # renvoi[nom,prenom,date_naissance,ine]
     player = Player(choice[0], choice[1], choice[2], choice[3])
     player.create()
     logging.warning("Joueur créé")

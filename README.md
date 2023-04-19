@@ -25,6 +25,18 @@ Suivre les instructions affichées sur le terminal.
 
 # Informations.
 
+### IMPORTANT:
+
+Etapes à suivre pour une bonne gestion du tournois : \
+1 - Menu joueurs : créer les joueurs \
+2 - Menu tournois : créer un tournois
+
+Vous pourrez quitter un tournois qu'à sa création ou à la fin de chaque round.\
+Pour y revenir, menu tournois -> tournois en cours. \
+Si 1 seul tournois est en cours, le programme reprend automatiquement ce \
+tournois.\
+Si plusieurs sont en cours, vous pourrez choisir lequel reprendre.
+
 ### Sauvegarde, chargement des données :
 
 La sauvegarde et le chargement des données se fait durant le code. \

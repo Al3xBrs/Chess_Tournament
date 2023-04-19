@@ -186,7 +186,7 @@ def sub_menu_tournament_view(tournament, padding=15, sep="|"):
 
 
 def started_tournament_view(tournament, rounde, padding=15, sep="|"):
-    """"""
+    """ """
     print(
         f"{'name'.ljust(padding)} {sep} {'place'.ljust(padding)} {sep} "
         f"{'start date'.ljust(padding)} {sep} {'status'.ljust(padding)} {sep} "

@@ -177,7 +177,6 @@ def sub_menu_tournament_view(tournament, padding=15, sep="|"):
     print(f"""
         ------- Création Tournois -------
     (1) Commencer le tournois
-    (2) Modifier le tournois / les joueurs
     (3) Mettre fin au tournois
     (4) Retour
     (q) Menu principal
@@ -317,6 +316,18 @@ def next_round_view(matchs_list, round_number, padding=15, sep="|"):
         ------- Scores -------
         """)
     return input("Passer au round suivant ? (y/n) : ")
+
+
+def not_continue_round_view():
+    """ """
+
+    print("""
+    (1) Menu principal
+    (2) Menu joueur
+    (3) Menu tournois
+    (4) Retour / reprendre le tournois
+    """)
+    return input("Choix : ")
 
 
 def cancel_round_view(round):

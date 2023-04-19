@@ -6,7 +6,7 @@ from chess.controllers.players import players_menu_controller, \
     player_create_menu_controller, player_remove_menu_controller, \
     player_submenu_controller
 from chess.controllers.tournaments import tournaments_menu_controller, \
-    search_tournament_score_controller, \
+    search_tournament_score_controller, not_continue_round_controller, \
     searched_tournament_submenu_controller, \
     search_submenu_tournaments_controller, search_tournaments_controller, \
     next_round_controller, end_tournament_controller, \
@@ -29,6 +29,7 @@ routes = {
     "create_tournament_controller": create_tournament_controller,
     "sub_menu_tournament_controller": sub_menu_tournament_controller,
     "started_tournament_controller": started_tournament_controller,
+    "not_continue_round_controller": not_continue_round_controller,
     "cancel_round_controller": cancel_round_controller,
     "scores_round_controller": scores_round_controller,
     "end_tournament_controller": end_tournament_controller,

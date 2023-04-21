@@ -1,7 +1,7 @@
-from chess.controllers.main import Main, Controller
+from chess.controllers.controller import Controller
 
 routes = {
-    "main_menu_controller": Main.main_menu,
+    "main_menu_controller": Controller.main_menu,
     "players_menu_controller": Controller.players_menu,
     "players_list_menu_controller": Controller.players_list_menu,
     "players_list_controller": Controller.players_list,
@@ -35,7 +35,7 @@ routes = {
 def main():
     """ """
     payload = {}
-    controller_key, payload = Main.main_menu(payload)
+    controller_key, payload = Controller.main_menu(payload)
     while True:
         controller = routes[controller_key]
         controller_key, payload = controller(payload)

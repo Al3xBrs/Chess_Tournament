@@ -1,47 +1,33 @@
-from chess.controllers.main import main_menu_controller
-from chess.controllers.players import players_menu_controller, \
-    players_list_menu_controller, \
-    players_list_controller, player_update_controller, \
-    search_player_controller, \
-    player_create_menu_controller, player_remove_menu_controller, \
-    player_submenu_controller
-from chess.controllers.tournaments import tournaments_menu_controller, \
-    search_tournament_score_controller, not_continue_round_controller, \
-    searched_tournament_submenu_controller, \
-    search_submenu_tournaments_controller, search_tournaments_controller, \
-    next_round_controller, end_tournament_controller, \
-    create_tournament_controller, scores_round_controller, \
-    cancel_round_controller, select_tournament_controller, \
-    sub_menu_tournament_controller, started_tournament_controller
+from chess.controllers.main import Main, Controller
 
 routes = {
-    "main_menu_controller": main_menu_controller,
-    "players_menu_controller": players_menu_controller,
-    "players_list_menu_controller": players_list_menu_controller,
-    "players_list_controller": players_list_controller,
-    "player_create_menu_controller": player_create_menu_controller,
-    "player_remove_menu_controller": player_remove_menu_controller,
-    "player_submenu_controller": player_submenu_controller,
-    "player_update_controller": player_update_controller,
-    "search_player_controller": search_player_controller,
+    "main_menu_controller": Main.main_menu,
+    "players_menu_controller": Controller.players_menu,
+    "players_list_menu_controller": Controller.players_list_menu,
+    "players_list_controller": Controller.players_list,
+    "player_create_menu_controller": Controller.player_create_menu,
+    "player_remove_menu_controller": Controller.player_remove_menu,
+    "player_submenu_controller": Controller.player_submenu,
+    "player_update_controller": Controller.player_update,
+    "search_player_controller": Controller.search_player,
 
-    "tournaments_menu_controller": tournaments_menu_controller,
-    "create_tournament_controller": create_tournament_controller,
-    "sub_menu_tournament_controller": sub_menu_tournament_controller,
-    "started_tournament_controller": started_tournament_controller,
-    "not_continue_round_controller": not_continue_round_controller,
-    "cancel_round_controller": cancel_round_controller,
-    "scores_round_controller": scores_round_controller,
-    "end_tournament_controller": end_tournament_controller,
-    "next_round_controller": next_round_controller,
-    "search_tournaments_controller": search_tournaments_controller,
+    "tournaments_menu_controller": Controller.tournaments_menu,
+    "create_tournament_controller": Controller.create_tournament,
+    "sub_menu_tournament_controller": Controller.sub_menu_tournament,
+    "started_tournament_controller": Controller.started_tournament,
+    "not_continue_round_controller": Controller.not_continue_round,
+    "cancel_round_controller": Controller.cancel_round,
+    "scores_round_controller": Controller.scores_round,
+    "end_tournament_controller": Controller.end_tournament,
+    "next_round_controller": Controller.next_round,
+    "search_tournaments_controller": Controller.search_tournaments,
     "search_submenu_tournaments_controller":
-        search_submenu_tournaments_controller,
+        Controller.search_submenu_tournaments,
     "searched_tournament_submenu_controller":
-        searched_tournament_submenu_controller,
+        Controller.searched_tournament_submenu,
     "search_tournament_score_controller":
-        search_tournament_score_controller,
-    "select_tournament_controller": select_tournament_controller,
+        Controller.search_tournament_score,
+    "select_tournament_controller": Controller.select_tournament,
 
 }
 
@@ -49,7 +35,7 @@ routes = {
 def main():
     """ """
     payload = {}
-    controller_key, payload = main_menu_controller(payload)
+    controller_key, payload = Main.main_menu(payload)
     while True:
         controller = routes[controller_key]
         controller_key, payload = controller(payload)
